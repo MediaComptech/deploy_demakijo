@@ -14,8 +14,26 @@ class PengaturanController extends Controller
         if (!Auth::check()) { redirect('/login'); }
     }
 
+    private function checkSchema()
+    {
+        try {
+            $schema = \Illuminate\Database\Capsule\Manager::schema();
+            if (!$schema->hasColumn('setting_websites', 'gambar_header')) {
+                $schema->table('setting_websites', function ($table) {
+                    $table->string('gambar_header')->nullable();
+                });
+            }
+            if (!$schema->hasColumn('setting_websites', 'foto_identitas')) {
+                $schema->table('setting_websites', function ($table) {
+                    $table->string('foto_identitas')->nullable();
+                });
+            }
+        } catch (\Exception $e) {}
+    }
+
     public function index()
     {
+        $this->checkSchema();
         $data = SettingWebsite::first();
         if (!$data) {
             $data = SettingWebsite::create([
@@ -31,35 +49,38 @@ class PengaturanController extends Controller
 
     public function store(Request $request)
     {
+        $this->checkSchema();
         $data    = SettingWebsite::first();
         $section = $request->input('section', 'identitas');
 
         // Definisi field per segmen — hanya field segmen ini yang akan diupdate
         $sectionFields = [
-            'identitas'  => ['nama_sekolah', 'email', 'telepon', 'whatsapp', 'alamat', 'google_maps'],
-            'kepsek'     => ['nama_kepsek', 'nip_kepsek', 'sambutan_kepsek_singkat'],
-            'statistik'  => ['jumlah_siswa', 'jumlah_guru', 'jumlah_alumni', 'akreditasi'],
-            'slider'     => ['slider_1', 'slider_2', 'slider_3', 'slider_4', 'slider_5'],
-            'visi_misi'  => ['visi', 'misi', 'sejarah', 'sambutan_kepsek'],
-            'sosmed'     => ['facebook', 'instagram', 'youtube', 'youtube_embed'],
-            'logo'       => ['logo'],
+            'identitas'      => ['nama_sekolah', 'email', 'telepon', 'whatsapp', 'alamat', 'google_maps'],
+            'kepsek'         => ['nama_kepsek', 'nip_kepsek', 'sambutan_kepsek_singkat'],
+            'statistik'      => ['jumlah_siswa', 'jumlah_guru', 'jumlah_alumni', 'akreditasi'],
+            'slider'         => ['slider_1', 'slider_2', 'slider_3', 'slider_4', 'slider_5'],
+            'visi_misi'      => ['visi', 'misi', 'sejarah', 'sambutan_kepsek'],
+            'sosmed'         => ['facebook', 'instagram', 'youtube', 'youtube_embed'],
+            'logo'           => ['logo'],
+            'gambar_halaman' => ['gambar_header', 'foto_identitas'],
         ];
 
         $sectionLabels = [
-            'identitas' => 'Identitas Sekolah',
-            'kepsek'    => 'Kepala Sekolah',
-            'statistik' => 'Statistik Sekolah',
-            'slider'    => 'Image Slider',
-            'visi_misi' => 'Visi, Misi & Sejarah',
-            'sosmed'    => 'Media Sosial',
-            'logo'      => 'Logo Sekolah',
+            'identitas'      => 'Identitas Sekolah',
+            'kepsek'         => 'Kepala Sekolah',
+            'statistik'      => 'Statistik Sekolah',
+            'slider'         => 'Image Slider',
+            'visi_misi'      => 'Visi, Misi & Sejarah',
+            'sosmed'         => 'Media Sosial',
+            'logo'           => 'Logo Sekolah',
+            'gambar_halaman' => 'Gambar Halaman',
         ];
 
         // Ambil hanya field yang termasuk segmen ini dari POST
         $allowedFields = $sectionFields[$section] ?? [];
         $input = [];
         foreach ($allowedFields as $field) {
-            if ($section !== 'slider' && $section !== 'kepsek' && $section !== 'logo') {
+            if (!in_array($section, ['slider', 'kepsek', 'logo', 'gambar_halaman'])) {
                 $val = $request->input($field);
                 if ($val !== null) {
                     $input[$field] = $val === '' ? null : $val;
@@ -84,6 +105,25 @@ class PengaturanController extends Controller
             if ($request->hasFile('logo')) {
                 if ($data->logo) native_storage_delete($data->logo);
                 $input['logo'] = $request->file('logo')->store('logo', 'public');
+            }
+        }
+
+        // === Handle Gambar Halaman (Header & Identitas) ===
+        if ($section === 'gambar_halaman') {
+            if ($request->hasFile('gambar_header')) {
+                if ($data->gambar_header) native_storage_delete($data->gambar_header);
+                $input['gambar_header'] = $request->file('gambar_header')->store('header', 'public');
+            } elseif ($request->input('delete_gambar_header')) {
+                if ($data->gambar_header) native_storage_delete($data->gambar_header);
+                $input['gambar_header'] = null;
+            }
+
+            if ($request->hasFile('foto_identitas')) {
+                if ($data->foto_identitas) native_storage_delete($data->foto_identitas);
+                $input['foto_identitas'] = $request->file('foto_identitas')->store('identitas', 'public');
+            } elseif ($request->input('delete_foto_identitas')) {
+                if ($data->foto_identitas) native_storage_delete($data->foto_identitas);
+                $input['foto_identitas'] = null;
             }
         }
 

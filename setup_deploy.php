@@ -110,6 +110,7 @@ if ($action === 'check') {
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=sync_files" style="background:#0056b3;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">📂 2. Sync File dari Repositori ke public_html</a></p>';
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=create_env" style="background:#28a745;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">⚙️ 3. Buat file .env production</a></p>';
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=fix_perms" style="background:#fd7e14;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">🔐 4. Fix Permission Folder</a></p>';
+    echo '<p><a href="?token='.$SECRET_TOKEN.'&action=seed_calendar" style="background:#7c3aed;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">📅 5. Update Kalender Akademik Sleman</a></p>';
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=all" style="background:#003366;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">🚀 LAKUKAN SEMUA LANGKAH SEKALIGUS</a></p>';
     echo '</div>';
 }
@@ -181,6 +182,22 @@ if ($action === 'fix_perms' || $action === 'all') {
             if (basename($f) !== '.gitkeep') { unlink($f); $deleted++; }
         }
         log_line("Cache lama dihapus: {$deleted} file");
+    }
+    echo '</div>';
+}
+
+// ==== ACTION: SEED ACADEMIC CALENDAR ====
+if ($action === 'seed_calendar' || $action === 'all') {
+    echo '<div class="box"><h3>📅 Sinkronisasi Kalender Akademik Sleman...</h3>';
+    $seedFile = $PUBLIC_HTML . '/public/seed_academic_calendar.php';
+    if (file_exists($seedFile)) {
+        ob_start();
+        include $seedFile;
+        $output = ob_get_clean();
+        echo "<pre style='background:#f8fafc; padding:10px; border-radius:6px; border:1px solid #e2e8f0; font-family:monospace; color:#333;'>" . htmlspecialchars($output) . "</pre>";
+        log_line("Kalender Akademik berhasil diperbarui!");
+    } else {
+        log_line("ERROR: File seed_academic_calendar.php tidak ditemukan di {$seedFile}", false);
     }
     echo '</div>';
 }

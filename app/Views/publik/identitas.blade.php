@@ -6,31 +6,37 @@
         color: #495057;
         font-weight: 600;
         transition: all 0.2s ease;
-        border: 1px solid rgba(0,0,0,0.05);
+        border: 1px solid rgba(0, 0, 0, 0.05);
         background: #ffffff;
     }
+
     .profile-sidebar .nav-link:hover {
         background: rgba(0, 51, 102, 0.04);
         color: #003366;
     }
+
     .profile-sidebar .nav-link.active {
         background: #0056b3 !important;
         color: #ffffff !important;
         border-color: #0056b3 !important;
         box-shadow: 0 4px 10px rgba(0, 86, 179, 0.15);
     }
+
     .info-table td {
         padding: 0.75rem 0.5rem;
         font-size: 0.95rem;
     }
+
     .info-table tr:not(:last-child) {
         border-bottom: 1px solid #f1f5f9;
     }
+
     .stat-card {
         border-radius: 1rem;
         border: 1px solid rgba(0, 0, 0, 0.04);
         transition: transform 0.3s ease;
     }
+
     .stat-card:hover {
         transform: translateY(-3px);
     }
@@ -105,7 +111,7 @@
                             <tr>
                                 <td class="text-muted fw-semibold">Email</td>
                                 <td class="text-muted">:</td>
-                                <td><a href="mailto:sdn.demakijo1@gmail.com" class="text-decoration-none">sdn.demakijo1@gmail.com</a></td>
+                                <td><a href="mailto:info@sdndemakijo1.sch.id" class="text-decoration-none">info@sdndemakijo1.sch.id</a></td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Kepala Sekolah</td>
@@ -129,9 +135,13 @@
                 <!-- Foto, Visi & Misi -->
                 <div class="col-md-5 d-flex flex-column gap-3">
                     <div class="rounded-4 overflow-hidden shadow-sm" style="height: 160px;">
-                        <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Foto Sekolah" class="w-100 h-100" style="object-fit: cover;">
+                        @if($profil && $profil->foto_identitas)
+                            <img src="{{ asset('storage/'.$profil->foto_identitas) }}" alt="Foto Sekolah" class="w-100 h-100" style="object-fit: cover;">
+                        @else
+                            <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Foto Sekolah" class="w-100 h-100" style="object-fit: cover;">
+                        @endif
                     </div>
-                    
+
                     <!-- Visi Sekolah -->
                     <div class="card border-0 rounded-4 p-3 text-white shadow-sm" style="background: linear-gradient(135deg, #003366, #0056b3);">
                         <div class="d-flex align-items-center justify-content-between mb-2">
@@ -151,11 +161,11 @@
                         </div>
                         <ul class="text-muted small mb-0 ps-3" style="line-height: 1.6; font-size: 0.82rem;">
                             @if(!empty($profil->misi))
-                                {!! nl2br(e($profil->misi)) !!}
+                            {!! nl2br(e($profil->misi)) !!}
                             @else
-                                <li class="mb-1">Menyelenggarakan pembelajaran aktif, inovatif, kreatif, dan menyenangkan.</li>
-                                <li class="mb-1">Membentuk karakter siswa yang religius, jujur, dan disiplin.</li>
-                                <li>Mengembangkan minat, bakat, dan potensi siswa secara optimal.</li>
+                            <li class="mb-1">Menyelenggarakan pembelajaran aktif, inovatif, kreatif, dan menyenangkan.</li>
+                            <li class="mb-1">Membentuk karakter siswa yang religius, jujur, dan disiplin.</li>
+                            <li>Mengembangkan minat, bakat, dan potensi siswa secara optimal.</li>
                             @endif
                         </ul>
                     </div>

@@ -143,17 +143,85 @@
     <!-- SIDEBAR KIRI: Calendar & Category link list -->
     <div class="col-lg-4 col-xl-3" data-aos="fade-right">
         <!-- Calendar Widget -->
+        @php
+            // Deteksi bulan & tahun aktif untuk kalender
+            $currentMonthVal = (int)date('m');
+            $currentYearVal = (int)date('Y');
+            
+            $calMonth = isset($_GET['cal_month']) ? (int)$_GET['cal_month'] : null;
+            $calYear = isset($_GET['cal_year']) ? (int)$_GET['cal_year'] : null;
+            
+            if (!$calMonth || !$calYear) {
+                // Periksa apakah ada event di bulan berjalan saat ini
+                $hasCurrentMonthEvents = false;
+                $currentMonthYearStr = date('Y-m');
+                foreach ($agenda as $item) {
+                    if (strpos($item->tanggal_mulai, $currentMonthYearStr) === 0) {
+                        $hasCurrentMonthEvents = true;
+                        break;
+                    }
+                }
+                
+                if ($hasCurrentMonthEvents) {
+                    $calMonth = $currentMonthVal;
+                    $calYear = $currentYearVal;
+                } else {
+                    // Default ke bulan dengan agenda mendatang terdekat
+                    $upcomingEvent = null;
+                    $todayStr = date('Y-m-d');
+                    foreach ($agenda as $item) {
+                        if ($item->tanggal_mulai >= $todayStr) {
+                            if (!$upcomingEvent || $item->tanggal_mulai < $upcomingEvent->tanggal_mulai) {
+                                $upcomingEvent = $item;
+                            }
+                        }
+                    }
+                    if ($upcomingEvent) {
+                        $calMonth = (int)date('m', strtotime($upcomingEvent->tanggal_mulai));
+                        $calYear = (int)date('Y', strtotime($upcomingEvent->tanggal_mulai));
+                    } else {
+                        $calMonth = $currentMonthVal;
+                        $calYear = $currentYearVal;
+                    }
+                }
+            }
+            
+            $calTime = mktime(0, 0, 0, $calMonth, 1, $calYear);
+            $monthName = date('F', $calTime);
+            $firstDay = date('w', $calTime);
+            $daysInMonth = (int)date('t', $calTime);
+            
+            $idMonths = [
+                'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret',
+                'April' => 'April', 'May' => 'Mei', 'June' => 'Juni',
+                'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September',
+                'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember'
+            ];
+            $displayMonthName = $idMonths[$monthName] ?? $monthName;
+
+            // Navigasi bulan
+            $prevMonth = $calMonth - 1;
+            $prevYear = $calYear;
+            if ($prevMonth < 1) { $prevMonth = 12; $prevYear--; }
+            
+            $nextMonth = $calMonth + 1;
+            $nextYear = $calYear;
+            if ($nextMonth > 12) { $nextMonth = 1; $nextYear++; }
+
+            $todayNum = (int)date('d');
+            $todayMonthYear = date('m-Y');
+            $calMonthYear = sprintf('%02d-%d', $calMonth, $calYear);
+        @endphp
+
         <div class="mini-calendar mb-4">
-            <div class="calendar-header">
-                <span class="fw-bold"><i class="fas fa-calendar-alt me-2"></i>{{ date('F Y') }}</span>
-                <span class="badge bg-warning text-dark px-2 py-1 fw-bold small">Hari Ini</span>
+            <div class="calendar-header d-flex justify-content-between align-items-center">
+                <a href="?cal_month={{ $prevMonth }}&cal_year={{ $prevYear }}" class="text-white text-decoration-none px-2"><i class="fas fa-chevron-left"></i></a>
+                <span class="fw-bold"><i class="fas fa-calendar-alt me-2"></i>{{ $displayMonthName }} {{ $calYear }}</span>
+                <a href="?cal_month={{ $nextMonth }}&cal_year={{ $nextYear }}" class="text-white text-decoration-none px-2"><i class="fas fa-chevron-right"></i></a>
             </div>
             <div class="calendar-grid">
                 @php
                     $days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-                    $todayNum = (int)date('d');
-                    $firstDay = date('w', strtotime(date('Y-m-01')));
-                    $daysInMonth = (int)date('t');
                 @endphp
                 @foreach($days as $d)
                     <div class="calendar-day-name">{{ $d }}</div>
@@ -170,15 +238,14 @@
                         foreach($agenda as $item) {
                             $startDay = (int)date('d', strtotime($item->tanggal_mulai));
                             $endDay = (int)date('d', strtotime($item->tanggal_selesai));
-                            $startMonth = date('m-Y', strtotime($item->tanggal_mulai));
-                            $currentMonth = date('m-Y');
-                            if ($startMonth == $currentMonth && $day >= $startDay && $day <= $endDay) {
+                            $eventMonthYear = date('m-Y', strtotime($item->tanggal_mulai));
+                            if ($eventMonthYear == $calMonthYear && $day >= $startDay && $day <= $endDay) {
                                 $hasEvent = true;
                                 break;
                             }
                         }
                     @endphp
-                    <div class="calendar-cell {{ $day == $todayNum ? 'today-date' : '' }} {{ $hasEvent ? 'active-date' : '' }}" 
+                    <div class="calendar-cell {{ ($day == $todayNum && $todayMonthYear == $calMonthYear) ? 'today-date' : '' }} {{ $hasEvent ? 'active-date' : '' }}" 
                          title="{{ $hasEvent ? 'Ada Kegiatan Sekolah' : '' }}">
                         {{ $day }}
                     </div>

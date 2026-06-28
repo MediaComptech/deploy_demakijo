@@ -316,7 +316,10 @@
     </nav>
 
     @if(!request()->is('/'))
-    <header class="page-header">
+    @php
+        $headerBg = ($siteConfig && $siteConfig->gambar_header) ? asset('storage/'.$siteConfig->gambar_header) : 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1920&q=80';
+    @endphp
+    <header class="page-header" style="background: linear-gradient(rgba(0, 86, 179, 0.85), rgba(0, 86, 179, 0.85)), url('{{ $headerBg }}') center/cover;">
         <div class="container" data-aos="fade-up">
             <h1 class="display-5" style="color:white !important;">{{ $header_title ?? $title ?? 'Halaman' }}</h1>
             <nav aria-label="breadcrumb">

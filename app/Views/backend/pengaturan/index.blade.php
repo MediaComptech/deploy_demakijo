@@ -352,6 +352,81 @@
         </div>
     </div>
 
+    {{-- ===== SEGMEN 7: GAMBAR HALAMAN (HEADER & IDENTITAS) ===== --}}
+    <div class="col-12 mt-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header d-flex align-items-center justify-content-between py-3"
+                 style="background: linear-gradient(135deg, #1e293b, #334155); border-radius: .5rem .5rem 0 0;">
+                <h6 class="mb-0 text-white fw-bold">
+                    <i class="fas fa-panorama me-2"></i>Gambar Halaman Sub-Page & Identitas Sekolah
+                    <small class="ms-2 opacity-75">(Agar Tampilan Tidak Monoton)</small>
+                </h6>
+                <span class="badge bg-white text-dark small">Segmen 7</span>
+            </div>
+            <div class="card-body">
+                <form action="{{ url('/admin/pengaturan') }}" method="POST" enctype="multipart/form-data">
+                    {!! csrf_field() !!}
+                    <input type="hidden" name="section" value="gambar_halaman">
+                    <div class="row g-4">
+                        <!-- Gambar Header Subpage -->
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded-3 bg-light">
+                                <label class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-image text-primary me-1"></i>Gambar Header Sub-Page
+                                </label>
+                                <p class="small text-muted mb-2">Ditampilkan sebagai latar belakang header judul di semua halaman publik (Berita, Agenda, Galeri, dll).</p>
+                                @if($data->gambar_header)
+                                    <div class="mb-3 position-relative">
+                                        <img src="{{ asset('storage/'.$data->gambar_header) }}" class="img-fluid rounded shadow-sm" style="max-height:140px; width:100%; object-fit:cover;">
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="delete_gambar_header" id="del_gh">
+                                            <label class="form-check-label text-danger small" for="del_gh"><i class="fas fa-trash-alt me-1"></i>Hapus & gunakan gambar default</label>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="mb-2 bg-white rounded d-flex align-items-center justify-content-center border-dashed" style="height:100px; border:2px dashed #cbd5e1;">
+                                        <span class="small text-muted"><i class="fas fa-info-circle me-1"></i>Menggunakan Gambar Default</span>
+                                    </div>
+                                @endif
+                                <input type="file" name="gambar_header" class="form-control form-control-sm" accept="image/*">
+                            </div>
+                        </div>
+
+                        <!-- Gambar Identitas Sekolah -->
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded-3 bg-light">
+                                <label class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-id-card text-success me-1"></i>Foto Halaman Identitas Sekolah
+                                </label>
+                                <p class="small text-muted mb-2">Foto kegiatan / gedung yang ditampilkan di bagian kanan atas halaman Identitas Sekolah.</p>
+                                @if($data->foto_identitas)
+                                    <div class="mb-3 position-relative">
+                                        <img src="{{ asset('storage/'.$data->foto_identitas) }}" class="img-fluid rounded shadow-sm" style="max-height:140px; width:100%; object-fit:cover;">
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="delete_foto_identitas" id="del_fi">
+                                            <label class="form-check-label text-danger small" for="del_fi"><i class="fas fa-trash-alt me-1"></i>Hapus & gunakan foto default</label>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="mb-2 bg-white rounded d-flex align-items-center justify-content-center border-dashed" style="height:100px; border:2px dashed #cbd5e1;">
+                                        <span class="small text-muted"><i class="fas fa-info-circle me-1"></i>Menggunakan Foto Default</span>
+                                    </div>
+                                @endif
+                                <input type="file" name="foto_identitas" class="form-control form-control-sm" accept="image/*">
+                            </div>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-dark px-4">
+                                <i class="fas fa-save me-2"></i>Simpan Gambar Halaman
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @endsection
