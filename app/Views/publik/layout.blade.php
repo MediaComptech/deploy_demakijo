@@ -417,7 +417,7 @@
                         @if($siteConfig && $siteConfig->google_maps)
                             <iframe src="{{ $siteConfig->google_maps }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                         @else
-                            <iframe src="https://maps.google.com/maps?q=SD%20Negeri%20Demakijo%201,%20Sleman&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.1100386346!2d110.3368605!3d-7.778155799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a580b6005a465%3A0x378bf13b6e8cf15b!2sSD%20Negeri%20Demakijo%201!5e0!3m2!1sid!2sid!4v1782648104368!5m2!1sid!2sid"
                                     width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
                                     referrerpolicy="no-referrer-when-downgrade"></iframe>
                         @endif
