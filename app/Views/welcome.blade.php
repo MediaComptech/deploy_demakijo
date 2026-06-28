@@ -3,6 +3,43 @@
 @section('content')
 
 {{-- Hero Carousel Section --}}
+<style>
+    .hero-slide-item {
+        background-size: cover !important;
+        background-position: center !important;
+        padding: 100px 0 80px;
+        color: white;
+    }
+    .hero-title {
+        font-family: 'Fredoka One', cursive;
+        font-size: 2.8rem;
+        line-height: 1.2;
+    }
+    @media (max-width: 768px) {
+        .hero-slide-item {
+            padding: 50px 15px 40px !important;
+        }
+        .hero-title {
+            font-size: 1.65rem !important;
+            margin-bottom: 0.75rem !important;
+        }
+        .hero-desc {
+            font-size: 0.9rem !important;
+            margin-bottom: 1.25rem !important;
+        }
+        .hero-btn-group {
+            flex-direction: column;
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+        .hero-btn-group .btn {
+            width: 100%;
+            font-size: 0.9rem !important;
+            padding: 10px 20px !important;
+        }
+    }
+</style>
 <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
     <div class="carousel-indicators">
         @php
@@ -41,18 +78,18 @@
     <div class="carousel-inner">
         @foreach($sliders as $idx => $slide)
         <div class="carousel-item {{ $idx == 0 ? 'active' : '' }}">
-            <div style="background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.55)), url('{{ $slide }}') center/cover; padding: 180px 0 130px; color: white;">
+            <div class="hero-slide-item" style="background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.55)), url('{{ $slide }}');">
                 <div class="container text-center" data-aos="zoom-in">
                     @if($idx == 0)
-                        <span class="badge bg-warning text-dark px-3 py-2 mb-3 rounded-pill fw-bold" style="letter-spacing:2px;">BERANDA SEKOLAH</span>
+                        <span class="badge bg-warning text-dark px-3 py-2 mb-3 rounded-pill fw-bold" style="letter-spacing:1px; font-size:0.75rem;">BERANDA SEKOLAH</span>
                     @endif
-                    <h1 class="display-3 fw-bold mb-4 text-white" style="font-family:'Fredoka One',cursive;">
+                    <h1 class="fw-bold mb-3 text-white hero-title">
                         {{ $slideTitles[$idx] ?? 'SDN Demakijo 1' }}
                     </h1>
-                    <p class="lead mb-5 mx-auto" style="max-width:800px;">
+                    <p class="lead mb-4 mx-auto hero-desc" style="max-width:750px;">
                         {{ $slideDescs[$idx] ?? '' }}
                     </p>
-                    <div class="d-flex justify-content-center gap-3">
+                    <div class="d-flex justify-content-center gap-3 hero-btn-group">
                         <a href="/profil" class="btn btn-warning btn-lg px-4 fw-bold shadow-sm rounded-pill text-primary">Profil Kami</a>
                         <a href="/ppdb-online" class="btn btn-outline-light btn-lg px-4 fw-bold shadow-sm rounded-pill">Daftar PPDB</a>
                     </div>

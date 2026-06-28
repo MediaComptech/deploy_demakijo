@@ -126,20 +126,38 @@
                     </table>
                 </div>
 
-                <!-- Foto & Visi -->
-                <div class="col-md-5 d-flex flex-column gap-3 justify-content-between">
-                    <div class="rounded-4 overflow-hidden shadow-sm" style="height: 220px;">
+                <!-- Foto, Visi & Misi -->
+                <div class="col-md-5 d-flex flex-column gap-3">
+                    <div class="rounded-4 overflow-hidden shadow-sm" style="height: 160px;">
                         <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Foto Sekolah" class="w-100 h-100" style="object-fit: cover;">
                     </div>
                     
-                    <div class="card border-0 rounded-4 p-4 text-white" style="background: linear-gradient(135deg, #003366, #0056b3);">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <h5 class="fw-bold mb-0">Visi Sekolah</h5>
-                            <i class="fas fa-bullseye fa-lg text-warning"></i>
+                    <!-- Visi Sekolah -->
+                    <div class="card border-0 rounded-4 p-3 text-white shadow-sm" style="background: linear-gradient(135deg, #003366, #0056b3);">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="fw-bold mb-0">Visi Sekolah</h6>
+                            <i class="fas fa-bullseye text-warning"></i>
                         </div>
-                        <p class="mb-0 fs-6 lh-base italic" style="font-style: italic;">
-                            "Terwujudnya peserta didik yang berakhlak mulia, cerdas, mandiri, dan berprestasi."
+                        <p class="mb-0 small italic" style="font-style: italic; line-height: 1.5;">
+                            {{ $profil->visi ?? '"Terwujudnya peserta didik yang berakhlak mulia, cerdas, mandiri, dan berprestasi."' }}
                         </p>
+                    </div>
+
+                    <!-- Misi Sekolah -->
+                    <div class="card border-0 rounded-4 p-3 shadow-sm" style="background: #f8fafc; border-left: 4px solid #ffc107 !important;">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="fw-bold mb-0 text-primary">Misi Sekolah</h6>
+                            <i class="fas fa-list-check text-warning"></i>
+                        </div>
+                        <ul class="text-muted small mb-0 ps-3" style="line-height: 1.6; font-size: 0.82rem;">
+                            @if(!empty($profil->misi))
+                                {!! nl2br(e($profil->misi)) !!}
+                            @else
+                                <li class="mb-1">Menyelenggarakan pembelajaran aktif, inovatif, kreatif, dan menyenangkan.</li>
+                                <li class="mb-1">Membentuk karakter siswa yang religius, jujur, dan disiplin.</li>
+                                <li>Mengembangkan minat, bakat, dan potensi siswa secara optimal.</li>
+                            @endif
+                        </ul>
                     </div>
                 </div>
             </div>
