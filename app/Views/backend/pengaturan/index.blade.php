@@ -377,8 +377,9 @@
                         <ul class="mb-0 ps-3">
                             <li><strong>Gambar Header Sub-Page</strong> — latar belakang biru/foto di atas halaman Guru, Berita, Agenda, Galeri, dll. Ukuran ideal: <strong>1920×700px</strong></li>
                             <li><strong>Foto Identitas Sekolah</strong> — foto gedung/kegiatan yang tampil di halaman Identitas Sekolah, sebelah kanan tabel data. Ukuran ideal: <strong>800×500px</strong></li>
+                            <li><strong>Gambar Latar Belakang Login</strong> — foto ilustrasi halaman login sebelah kiri. Ukuran ideal: <strong>800×800px</strong> (Square/Portrait)</li>
                         </ul>
-                        Format: <strong>JPG / PNG</strong> &bull; Maks. <strong>2 MB</strong> per gambar
+                        Format: <strong>JPG / PNG / WebP</strong> &bull; Maks. <strong>2 MB</strong> per gambar
                     </div>
                 </div>
 
@@ -389,7 +390,7 @@
                     <div class="row g-4">
 
                         {{-- ===== SLOT 1: Gambar Header Sub-Page ===== --}}
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card border h-100 rounded-3 overflow-hidden shadow-sm">
                                 <div class="card-header d-flex align-items-center gap-2 py-2 px-3"
                                      style="background:#f1f5ff; border-bottom:2px solid #0d6efd;">
@@ -407,7 +408,7 @@
                                     <div class="mb-3">
                                         <label class="form-label small fw-semibold text-muted text-uppercase" style="letter-spacing:.5px;">Gambar Saat Ini</label>
                                         @if($data->gambar_header)
-                                            <div class="position-relative rounded-3 overflow-hidden" style="height:160px;">
+                                            <div class="position-relative rounded-3 overflow-hidden" style="height:140px;">
                                                 <img src="{{ asset('storage/'.$data->gambar_header) }}"
                                                      class="w-100 h-100" style="object-fit:cover;" alt="Header saat ini">
                                                 <div class="position-absolute bottom-0 start-0 end-0 px-2 py-1"
@@ -425,7 +426,7 @@
                                             </div>
                                         @else
                                             <div class="rounded-3 d-flex flex-column align-items-center justify-content-center text-center"
-                                                 style="height:160px; border:2px dashed #cbd5e1; background:#f8fafc;">
+                                                 style="height:140px; border:2px dashed #cbd5e1; background:#f8fafc;">
                                                 <i class="fas fa-image text-muted fa-2x mb-2 opacity-50"></i>
                                                 <span class="small text-muted">Menggunakan Gambar Default</span>
                                                 <span class="text-muted" style="font-size:0.7rem;">(foto sekolah dari Unsplash)</span>
@@ -438,7 +439,7 @@
                                         <label class="form-label small fw-semibold text-primary text-uppercase" style="letter-spacing:.5px;">
                                             <i class="fas fa-eye me-1"></i>Preview Gambar Baru
                                         </label>
-                                        <div class="rounded-3 overflow-hidden" style="height:120px;">
+                                        <div class="rounded-3 overflow-hidden" style="height:100px;">
                                             <img id="preview-gambar_header" src="" class="w-100 h-100" style="object-fit:cover;" alt="Preview">
                                         </div>
                                         <div id="info-gambar_header" class="small text-success mt-1"></div>
@@ -452,14 +453,14 @@
                                            class="form-control form-control-sm" accept="image/jpeg,image/png,image/webp"
                                            onchange="previewImage(this, 'gambar_header')">
                                     <div class="small text-muted mt-1">
-                                        <i class="fas fa-info-circle me-1 text-primary"></i>Rekomendasi: <strong>1920×700px</strong> &bull; JPG/PNG &bull; maks. 2MB
+                                        <i class="fas fa-info-circle me-1 text-primary"></i>Rekomendasi: <strong>1920×700px</strong>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {{-- ===== SLOT 2: Foto Identitas Sekolah ===== --}}
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card border h-100 rounded-3 overflow-hidden shadow-sm">
                                 <div class="card-header d-flex align-items-center gap-2 py-2 px-3"
                                      style="background:#f0fdf4; border-bottom:2px solid #16a34a;">
@@ -477,7 +478,7 @@
                                     <div class="mb-3">
                                         <label class="form-label small fw-semibold text-muted text-uppercase" style="letter-spacing:.5px;">Foto Saat Ini</label>
                                         @if($data->foto_identitas)
-                                            <div class="position-relative rounded-3 overflow-hidden" style="height:160px;">
+                                            <div class="position-relative rounded-3 overflow-hidden" style="height:140px;">
                                                 <img src="{{ asset('storage/'.$data->foto_identitas) }}"
                                                      class="w-100 h-100" style="object-fit:cover;" alt="Foto identitas saat ini">
                                                 <div class="position-absolute bottom-0 start-0 end-0 px-2 py-1"
@@ -495,7 +496,7 @@
                                             </div>
                                         @else
                                             <div class="rounded-3 d-flex flex-column align-items-center justify-content-center text-center"
-                                                 style="height:160px; border:2px dashed #cbd5e1; background:#f8fafc;">
+                                                 style="height:140px; border:2px dashed #cbd5e1; background:#f8fafc;">
                                                 <i class="fas fa-id-card text-muted fa-2x mb-2 opacity-50"></i>
                                                 <span class="small text-muted">Menggunakan Foto Default</span>
                                                 <span class="text-muted" style="font-size:0.7rem;">(foto wisuda dari Unsplash)</span>
@@ -508,7 +509,7 @@
                                         <label class="form-label small fw-semibold text-success text-uppercase" style="letter-spacing:.5px;">
                                             <i class="fas fa-eye me-1"></i>Preview Foto Baru
                                         </label>
-                                        <div class="rounded-3 overflow-hidden" style="height:120px;">
+                                        <div class="rounded-3 overflow-hidden" style="height:100px;">
                                             <img id="preview-foto_identitas" src="" class="w-100 h-100" style="object-fit:cover;" alt="Preview">
                                         </div>
                                         <div id="info-foto_identitas" class="small text-success mt-1"></div>
@@ -522,7 +523,77 @@
                                            class="form-control form-control-sm" accept="image/jpeg,image/png,image/webp"
                                            onchange="previewImage(this, 'foto_identitas')">
                                     <div class="small text-muted mt-1">
-                                        <i class="fas fa-info-circle me-1 text-success"></i>Rekomendasi: <strong>800×500px</strong> &bull; JPG/PNG &bull; maks. 2MB
+                                        <i class="fas fa-info-circle me-1 text-success"></i>Rekomendasi: <strong>800×500px</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- ===== SLOT 3: Foto Latar Belakang Login ===== --}}
+                        <div class="col-md-4">
+                            <div class="card border h-100 rounded-3 overflow-hidden shadow-sm">
+                                <div class="card-header d-flex align-items-center gap-2 py-2 px-3"
+                                     style="background:#fff7ed; border-bottom:2px solid #ea580c;">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white"
+                                         style="width:30px;height:30px;background:#ea580c;flex-shrink:0;">
+                                        <i class="fas fa-sign-in-alt" style="font-size:0.75rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold small text-dark">Latar Belakang Login</div>
+                                        <div class="text-muted" style="font-size:0.7rem;">Ilustrasi sebelah kiri halaman login</div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    {{-- Preview Gambar Saat Ini --}}
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-semibold text-muted text-uppercase" style="letter-spacing:.5px;">Foto Saat Ini</label>
+                                        @if($data->foto_login)
+                                            <div class="position-relative rounded-3 overflow-hidden" style="height:140px;">
+                                                <img src="{{ asset('storage/'.$data->foto_login) }}"
+                                                     class="w-100 h-100" style="object-fit:cover;" alt="Foto login saat ini">
+                                                <div class="position-absolute bottom-0 start-0 end-0 px-2 py-1"
+                                                     style="background:rgba(0,0,0,0.5);">
+                                                    <span class="text-white" style="font-size:0.7rem;">
+                                                        <i class="fas fa-check-circle text-success me-1"></i>Foto custom terpasang
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" name="delete_foto_login" id="del_fl">
+                                                <label class="form-check-label text-danger small" for="del_fl">
+                                                    <i class="fas fa-trash-alt me-1"></i>Hapus &amp; kembali ke foto default
+                                                </label>
+                                            </div>
+                                        @else
+                                            <div class="rounded-3 d-flex flex-column align-items-center justify-content-center text-center"
+                                                 style="height:140px; border:2px dashed #cbd5e1; background:#f8fafc;">
+                                                <i class="fas fa-sign-in-alt text-muted fa-2x mb-2 opacity-50"></i>
+                                                <span class="small text-muted">Menggunakan Foto Default</span>
+                                                <span class="text-muted" style="font-size:0.7rem;">(foto wisuda dari Unsplash)</span>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- Preview Live --}}
+                                    <div id="preview-wrap-foto_login" class="mb-3" style="display:none;">
+                                        <label class="form-label small fw-semibold text-warning text-uppercase" style="letter-spacing:.5px;">
+                                            <i class="fas fa-eye me-1"></i>Preview Foto Baru
+                                        </label>
+                                        <div class="rounded-3 overflow-hidden" style="height:100px;">
+                                            <img id="preview-foto_login" src="" class="w-100 h-100" style="object-fit:cover;" alt="Preview">
+                                        </div>
+                                        <div id="info-foto_login" class="small text-success mt-1"></div>
+                                    </div>
+
+                                    {{-- Input File --}}
+                                    <label class="form-label small fw-semibold text-dark">
+                                        <i class="fas fa-upload me-1 text-warning"></i>Pilih Foto Baru
+                                    </label>
+                                    <input type="file" name="foto_login" id="file-foto_login"
+                                           class="form-control form-control-sm" accept="image/jpeg,image/png,image/webp"
+                                           onchange="previewImage(this, 'foto_login')">
+                                    <div class="small text-muted mt-1">
+                                        <i class="fas fa-info-circle me-1 text-warning"></i>Rekomendasi: <strong>800×800px</strong>
                                     </div>
                                 </div>
                             </div>
@@ -594,9 +665,11 @@ function previewImage(input, fieldName) {
 document.getElementById('form-gambar-halaman').addEventListener('submit', function(e) {
     const delGH = document.getElementById('del_gh');
     const delFI = document.getElementById('del_fi');
+    const delFL = document.getElementById('del_fl');
     const toDelete = [];
     if (delGH && delGH.checked) toDelete.push('Gambar Header Sub-Page');
     if (delFI && delFI.checked) toDelete.push('Foto Identitas Sekolah');
+    if (delFL && delFL.checked) toDelete.push('Gambar Latar Belakang Login');
     if (toDelete.length > 0) {
         if (!confirm('Anda akan menghapus:\n• ' + toDelete.join('\n• ') + '\n\nLanjutkan?')) {
             e.preventDefault();

@@ -28,6 +28,11 @@ class PengaturanController extends Controller
                     $table->string('foto_identitas')->nullable();
                 });
             }
+            if (!$schema->hasColumn('setting_websites', 'foto_login')) {
+                $schema->table('setting_websites', function ($table) {
+                    $table->string('foto_login')->nullable();
+                });
+            }
         } catch (\Exception $e) {}
     }
 
@@ -62,7 +67,7 @@ class PengaturanController extends Controller
             'visi_misi'      => ['visi', 'misi', 'sejarah', 'sambutan_kepsek'],
             'sosmed'         => ['facebook', 'instagram', 'youtube', 'youtube_embed'],
             'logo'           => ['logo'],
-            'gambar_halaman' => ['gambar_header', 'foto_identitas'],
+            'gambar_halaman' => ['gambar_header', 'foto_identitas', 'foto_login'],
         ];
 
         $sectionLabels = [
@@ -108,7 +113,7 @@ class PengaturanController extends Controller
             }
         }
 
-        // === Handle Gambar Halaman (Header & Identitas) ===
+        // === Handle Gambar Halaman (Header, Identitas, & Login) ===
         if ($section === 'gambar_halaman') {
             if ($request->hasFile('gambar_header')) {
                 if ($data->gambar_header) native_storage_delete($data->gambar_header);
@@ -124,6 +129,14 @@ class PengaturanController extends Controller
             } elseif ($request->input('delete_foto_identitas')) {
                 if ($data->foto_identitas) native_storage_delete($data->foto_identitas);
                 $input['foto_identitas'] = null;
+            }
+
+            if ($request->hasFile('foto_login')) {
+                if ($data->foto_login) native_storage_delete($data->foto_login);
+                $input['foto_login'] = $request->file('foto_login')->store('login', 'public');
+            } elseif ($request->input('delete_foto_login')) {
+                if ($data->foto_login) native_storage_delete($data->foto_login);
+                $input['foto_login'] = null;
             }
         }
 

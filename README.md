@@ -453,18 +453,22 @@ Gunakan file migrasi manual atau modifikasi langsung di phpMyAdmin / DBeaver. Ke
 
 Untuk mengubah gambar/foto di bagian publik (frontend), login ke panel admin (`/login`), buka menu **Pengaturan Website** (`/admin/pengaturan`), dan ikuti petunjuk berikut:
 
-### 1. Mengubah Foto Hero
+### 1. Mengubah Foto Hero / Banner
 * **Hero Slider Utama (Beranda / Homepage)**:
   * Temukan **Segmen 4: Image Slider Hero (Maks. 5 Foto)**.
   * Pilih/upload file pada slot *Foto Slider 1* s.d *Foto Slider 5*.
-  * Rekomendasi ukuran ideal: **1920×700 piksel** (maks. 2MB, format JPG/PNG).
+  * Rekomendasi ukuran ideal: **1920×700 piksel** (maks. 2MB, format JPG/PNG/WebP).
 * **Hero Banner Halaman Lain (Sub-Page Header)**:
-  * Temukan **Segmen 7: Gambar Halaman Sub-Page & Identitas Sekolah**.
-  * Unggah foto baru pada kolom **Gambar Header Sub-Page**.
+  * Temukan **Segmen 7: Gambar Halaman Publik**.
+  * Unggah foto baru pada kolom **Gambar Header Sub-Page** (Rekomendasi: **1920×700px**).
 
-### 2. Mengubah Foto Profil/Identitas Sekolah
-* Temukan **Segmen 7: Gambar Halaman Sub-Page & Identitas Sekolah**.
-* Unggah foto baru pada kolom **Foto Halaman Identitas Sekolah** (foto yang tampil di sebelah kanan tabel informasi Visi & Misi).
+### 2. Mengubah Foto Profil / Identitas Sekolah
+* Temukan **Segmen 7: Gambar Halaman Publik**.
+* Unggah foto baru pada kolom **Foto Halaman Identitas Sekolah** (foto yang tampil di sebelah kanan tabel informasi Visi & Misi). Rekomendasi: **800×500px**.
+
+### 3. Mengubah Gambar Latar Belakang Halaman Login
+* Temukan **Segmen 7: Gambar Halaman Publik**.
+* Unggah foto baru pada kolom **Latar Belakang Login** (gambar ilustrasi di sisi kiri halaman login). Rekomendasi: **800×800px** (Square / Portrait).
 
 *Catatan Teknis:*
 * Form Pengaturan Admin: [index.blade.php](file:///c:/Users/SPV%20IT/Documents/deploy/demakijo1_deploy/app/Views/backend/pengaturan/index.blade.php)
