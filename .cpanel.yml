@@ -3,9 +3,13 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/sdnc1967/public_html
     - /bin/rsync -av --exclude='.git' --exclude='.env' --exclude='.env.local' --exclude='node_modules' ./ $DEPLOYPATH/
+    - /bin/mkdir -p $DEPLOYPATH/storage/cache
+    - /bin/mkdir -p $DEPLOYPATH/storage/framework/views
+    - /bin/mkdir -p $DEPLOYPATH/storage/framework/cache
+    - /bin/mkdir -p $DEPLOYPATH/storage/logs
     - /bin/find $DEPLOYPATH/storage/cache -name "*.bladec" -delete
     - /bin/find $DEPLOYPATH/storage/cache -name "*.php" -not -name ".gitkeep" -delete
-    - /bin/mkdir -p $DEPLOYPATH/storage/cache
+    - /bin/find $DEPLOYPATH/storage/framework/views -name "*.php" -not -name ".gitkeep" -delete
     - /bin/chmod -R 755 $DEPLOYPATH/storage
     - /bin/mkdir -p $DEPLOYPATH/public/storage/uploads
     - /bin/chmod -R 755 $DEPLOYPATH/public/storage
