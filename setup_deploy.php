@@ -20,7 +20,9 @@ if (!isset($_GET['token']) || $_GET['token'] !== $SECRET_TOKEN) {
 // ========================
 // KONFIGURASI PATH
 // ========================
-$REPO_PATH    = '/home/sdnc1967/repositories/demakijo1_deploy';
+// Sesuaikan nama folder ini dengan nama repo yang terdaftar di cPanel Git Version Control
+// Cek di cPanel: Git™ Version Control → Basic Information → Repository Path
+$REPO_PATH    = '/home/sdnc1967/repositories/deploy_demakijo';
 $PUBLIC_HTML  = '/home/sdnc1967/public_html';
 $ENV_CONTENT  = <<<ENV
 APP_NAME="SDN Demakijo 1"
