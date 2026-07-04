@@ -69,7 +69,7 @@ Repositori ini adalah hasil konversi penuh dari **Laravel** ke arsitektur **Nati
 | Kelola Berita | `/admin/berita` | CRUD berita dengan upload gambar |
 | Kategori Berita | `/admin/kategori-berita` | Manajemen kategori |
 | Kelola Album | `/admin/album` | CRUD album galeri foto |
-| Kelola Foto | `/admin/galeri` | Upload dan hapus foto per album |
+| Kelola Foto | `/admin/galeri` | Upload (multi-upload maks 10 foto) & integrasi URL Google Drive |
 | Pengumuman | `/admin/pengumuman` | CRUD pengumuman + lampiran file |
 | Agenda | `/admin/agenda` | Jadwal kegiatan sekolah |
 | Data Guru | `/admin/guru` | CRUD data guru & tendik |
@@ -82,7 +82,7 @@ Repositori ini adalah hasil konversi penuh dari **Laravel** ke arsitektur **Nati
 | PPDB | `/admin/ppdb` | Manajemen pendaftaran siswa baru |
 | Keunggulan Sekolah | `/admin/keunggulan` | Konten keunggulan di beranda |
 | Manajemen User | `/admin/user` | CRUD akun pengguna |
-| Pengaturan Website | `/admin/pengaturan` | Logo, slider, info sekolah, kontak |
+| Pengaturan Website | `/admin/pengaturan` | Logo, slider, info sekolah, kontak, profil lengkap & detail akreditasi (Segmen 8) |
 
 ---
 
@@ -470,9 +470,21 @@ Untuk mengubah gambar/foto di bagian publik (frontend), login ke panel admin (`/
 * Temukan **Segmen 7: Gambar Halaman Publik**.
 * Unggah foto baru pada kolom **Latar Belakang Login** (gambar ilustrasi di sisi kiri halaman login). Rekomendasi: **800×800px** (Square / Portrait).
 
+### 4. Mengubah Profil Detail & Akreditasi Sekolah (Segmen 8)
+* Temukan **Segmen 8: Profil Sekolah & Akreditasi**.
+* Masukkan NPSN, Status, Bentuk Pendidikan, Kode Pos, Tahun Berdiri, Luas Tanah, Jumlah Kelas, Jumlah Tendik, Nomor Sertifikat, Tahun, Peringkat, Berlaku Hingga, serta 8 Nilai Standar Penilaian Akreditasi.
+* Simpan untuk memperbarui halaman **Identitas Sekolah** dan **Akreditasi Sekolah** di web publik secara dinamis tanpa menyentuh source code.
+
+### 5. Mengelola Galeri Foto (Multi-Upload & Google Drive)
+* Buka menu **Kelola Foto** (`/admin/galeri`) -> **Upload Foto**.
+* **Upload Biasa (Maks. 10 Foto)**: Anda dapat menyeret (drag-and-drop) atau memilih hingga 10 berkas gambar sekaligus (Maksimal 5MB per berkas, format JPG/PNG/WebP/GIF).
+* **Integrasi Google Drive**: Jika berkas foto berukuran besar atau ingin menghemat ruang penyimpanan hosting, Anda dapat menyimpannya di Google Drive dan menempelkan tautan berkas di kolom **URL Google Drive**. Modul galeri akan mendeteksi dan mengarahkannya dengan aman di web publik.
+
 *Catatan Teknis:*
 * Form Pengaturan Admin: [index.blade.php](file:///c:/Users/SPV%20IT/Documents/deploy/demakijo1_deploy/app/Views/backend/pengaturan/index.blade.php)
 * Controller Backend: [PengaturanController.php](file:///c:/Users/SPV%20IT/Documents/deploy/demakijo1_deploy/app/Controllers/Backend/PengaturanController.php)
+* Form Galeri Admin: [create.blade.php](file:///c:/Users/SPV%20IT/Documents/deploy/demakijo1_deploy/app/Views/backend/galeri/create.blade.php)
+* Controller Galeri: [GaleriController.php](file:///c:/Users/SPV%20IT/Documents/deploy/demakijo1_deploy/app/Controllers/Backend/GaleriController.php)
 
 ---
 
