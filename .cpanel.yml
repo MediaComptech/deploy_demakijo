@@ -17,4 +17,5 @@ deployment:
     - /bin/chmod -R 755 $DEPLOYPATH/public/storage
     - php $DEPLOYPATH/migrate_add_role_to_users.php
     - php $DEPLOYPATH/migrate_add_kategori_to_prestasis.php
+    - php $DEPLOYPATH/migrate_add_profile_fields_to_settings.php
     - echo "Deploy selesai!"

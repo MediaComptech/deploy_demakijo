@@ -113,6 +113,7 @@ if ($action === 'check') {
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=create_env" style="background:#28a745;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">⚙️ 3. Buat file .env production</a></p>';
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=fix_perms" style="background:#fd7e14;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">🔐 4. Fix Permission Folder</a></p>';
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=seed_calendar" style="background:#7c3aed;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">📅 5. Update Kalender Akademik Sleman</a></p>';
+    echo '<p><a href="?token='.$SECRET_TOKEN.'&action=run_migrations" style="background:#20c997;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">🗄️ 6. Jalankan Migrasi Database (Kategori, Profil Sekolah, dsb)</a></p>';
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=all" style="background:#003366;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">🚀 LAKUKAN SEMUA LANGKAH SEKALIGUS</a></p>';
     echo '</div>';
 }
@@ -201,6 +202,49 @@ if ($action === 'seed_calendar' || $action === 'all') {
     } else {
         log_line("ERROR: File seed_academic_calendar.php tidak ditemukan di {$seedFile}", false);
     }
+    echo '</div>';
+}
+
+// ==== ACTION: RUN MIGRATIONS ====
+if ($action === 'run_migrations' || $action === 'all') {
+    echo '<div class="box"><h3>🗄️ Menjalankan Migrasi Database...</h3>';
+    
+    // 1. Jalankan migrasi Tambah Role Users
+    $m1 = $PUBLIC_HTML . '/migrate_add_role_to_users.php';
+    if (file_exists($m1)) {
+        ob_start();
+        include $m1;
+        $output = ob_get_clean();
+        echo "<pre style='background:#f8fafc; padding:10px; border-radius:6px; border:1px solid #e2e8f0; font-family:monospace; color:#333;'>" . htmlspecialchars($output) . "</pre>";
+        log_line("Migrasi 1 (Role Users) selesai!");
+    } else {
+        log_line("Migrasi 1 tidak ditemukan di {$m1}, melewati...");
+    }
+
+    // 2. Jalankan migrasi Tambah Kategori Prestasi
+    $m2 = $PUBLIC_HTML . '/migrate_add_kategori_to_prestasis.php';
+    if (file_exists($m2)) {
+        ob_start();
+        include $m2;
+        $output = ob_get_clean();
+        echo "<pre style='background:#f8fafc; padding:10px; border-radius:6px; border:1px solid #e2e8f0; font-family:monospace; color:#333;'>" . htmlspecialchars($output) . "</pre>";
+        log_line("Migrasi 2 (Kategori Prestasi) selesai!");
+    } else {
+        log_line("Migrasi 2 tidak ditemukan di {$m2}, melewati...");
+    }
+
+    // 3. Jalankan migrasi Tambah Profil Sekolah Settings
+    $m3 = $PUBLIC_HTML . '/migrate_add_profile_fields_to_settings.php';
+    if (file_exists($m3)) {
+        ob_start();
+        include $m3;
+        $output = ob_get_clean();
+        echo "<pre style='background:#f8fafc; padding:10px; border-radius:6px; border:1px solid #e2e8f0; font-family:monospace; color:#333;'>" . htmlspecialchars($output) . "</pre>";
+        log_line("Migrasi 3 (Kolom Profil Sekolah) selesai!");
+    } else {
+        log_line("Migrasi 3 tidak ditemukan di {$m3}, melewati...");
+    }
+
     echo '</div>';
 }
 

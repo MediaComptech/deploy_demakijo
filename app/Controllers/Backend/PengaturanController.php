@@ -33,6 +33,39 @@ class PengaturanController extends Controller
                     $table->string('foto_login')->nullable();
                 });
             }
+            // Kolom profil detail & akreditasi
+            $profilCols = [
+                'npsn'                        => ['string', 50],
+                'status_sekolah'              => ['string', 50],
+                'bentuk_pendidikan'           => ['string', 50],
+                'kode_pos'                    => ['string', 10],
+                'tahun_berdiri'               => ['string', 10],
+                'luas_tanah'                  => ['string', 50],
+                'jumlah_kelas'                => ['integer'],
+                'jumlah_tendik'               => ['integer'],
+                'timeline_sejarah'            => ['text'],
+                'akreditasi_no_sertifikat'    => ['string', 255],
+                'akreditasi_tahun'            => ['string', 10],
+                'akreditasi_peringkat'        => ['string', 50],
+                'akreditasi_berlaku'          => ['string', 10],
+                'akreditasi_standar_isi'      => ['integer'],
+                'akreditasi_standar_proses'   => ['integer'],
+                'akreditasi_standar_skl'      => ['integer'],
+                'akreditasi_standar_ptk'      => ['integer'],
+                'akreditasi_standar_sarpras'  => ['integer'],
+                'akreditasi_standar_pengelolaan' => ['integer'],
+                'akreditasi_standar_pembiayaan'  => ['integer'],
+                'akreditasi_standar_penilaian'   => ['integer'],
+            ];
+            foreach ($profilCols as $col => [$type, $len = null]) {
+                if (!$schema->hasColumn('setting_websites', $col)) {
+                    $schema->table('setting_websites', function ($table) use ($col, $type, $len) {
+                        if ($type === 'string') $table->string($col, $len ?? 255)->nullable();
+                        elseif ($type === 'integer') $table->integer($col)->nullable();
+                        elseif ($type === 'text') $table->text($col)->nullable();
+                    });
+                }
+            }
         } catch (\Exception $e) {}
     }
 
@@ -68,6 +101,14 @@ class PengaturanController extends Controller
             'sosmed'         => ['facebook', 'instagram', 'youtube', 'youtube_embed'],
             'logo'           => ['logo'],
             'gambar_halaman' => ['gambar_header', 'foto_identitas', 'foto_login'],
+            'profil_detail'  => [
+                'npsn', 'status_sekolah', 'bentuk_pendidikan', 'kode_pos', 'tahun_berdiri', 'luas_tanah', 
+                'jumlah_kelas', 'jumlah_tendik', 'timeline_sejarah', 'counter_kepala_sekolah', 'counter_alumni', 
+                'akreditasi_no_sertifikat', 'akreditasi_tahun', 'akreditasi_peringkat', 'akreditasi_berlaku', 
+                'akreditasi_standar_isi', 'akreditasi_standar_proses', 'akreditasi_standar_skl', 'akreditasi_standar_ptk', 
+                'akreditasi_standar_sarpras', 'akreditasi_standar_pengelolaan', 'akreditasi_standar_pembiayaan', 
+                'akreditasi_standar_penilaian'
+            ],
         ];
 
         $sectionLabels = [
@@ -79,6 +120,7 @@ class PengaturanController extends Controller
             'sosmed'         => 'Media Sosial',
             'logo'           => 'Logo Sekolah',
             'gambar_halaman' => 'Gambar Halaman',
+            'profil_detail'  => 'Profil & Akreditasi Sekolah',
         ];
 
         // Ambil hanya field yang termasuk segmen ini dari POST

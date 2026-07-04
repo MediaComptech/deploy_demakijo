@@ -81,52 +81,52 @@
                             <tr>
                                 <td class="text-muted fw-semibold">NPSN</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">20401066</td>
+                                <td class="text-dark">{{ $profil->npsn ?? '20401066' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Status Sekolah</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">{{ $profil->akreditasi == 'A' ? 'Negeri' : 'Negeri' }}</td>
+                                <td class="text-dark">{{ $profil->status_sekolah ?? 'Negeri' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Bentuk Pendidikan</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">SD</td>
+                                <td class="text-dark">{{ $profil->bentuk_pendidikan ?? 'SD' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Alamat</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">Demakijo, Gamping, Sleman, D.I Yogyakarta</td>
+                                <td class="text-dark">{{ $profil->alamat ?? 'Demakijo, Gamping, Sleman, D.I Yogyakarta' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Kode Pos</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">55294</td>
+                                <td class="text-dark">{{ $profil->kode_pos ?? '55294' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Telepon</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">(0274) 123456</td>
+                                <td class="text-dark">{{ $profil->telepon ?? '(0274) 123456' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Email</td>
                                 <td class="text-muted">:</td>
-                                <td><a href="mailto:info@sdndemakijo1.sch.id" class="text-decoration-none">info@sdndemakijo1.sch.id</a></td>
+                                <td><a href="mailto:{{ $profil->email ?? 'info@sdndemakijo1.sch.id' }}" class="text-decoration-none">{{ $profil->email ?? 'info@sdndemakijo1.sch.id' }}</a></td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Kepala Sekolah</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">Tri Lestari, S.Pd</td>
+                                <td class="text-dark">{{ $profil->nama_kepsek ?? 'Tri Lestari, S.Pd' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Tahun Berdiri</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">1985</td>
+                                <td class="text-dark">{{ $profil->tahun_berdiri ?? '1985' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Luas Tanah</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">2.450 m²</td>
+                                <td class="text-dark">{{ $profil->luas_tanah ?? '2.450 m²' }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -181,7 +181,7 @@
                         <i class="fas fa-door-open fa-lg"></i>
                     </div>
                     <div>
-                        <div class="fs-4 fw-bold text-dark">24</div>
+                        <div class="fs-4 fw-bold text-dark">{{ $profil->jumlah_kelas ?? 24 }}</div>
                         <div class="text-muted small fw-semibold">Ruang Kelas</div>
                     </div>
                 </div>
@@ -192,7 +192,7 @@
                         <i class="fas fa-chalkboard-teacher fa-lg"></i>
                     </div>
                     <div>
-                        <div class="fs-4 fw-bold text-dark">32</div>
+                        <div class="fs-4 fw-bold text-dark">{{ $profil->jumlah_guru ?? 32 }}</div>
                         <div class="text-muted small fw-semibold">Guru & Staf</div>
                     </div>
                 </div>
@@ -203,7 +203,7 @@
                         <i class="fas fa-user-graduate fa-lg"></i>
                     </div>
                     <div>
-                        <div class="fs-4 fw-bold text-dark">412</div>
+                        <div class="fs-4 fw-bold text-dark">{{ $profil->jumlah_siswa ?? 412 }}</div>
                         <div class="text-muted small fw-semibold">Peserta Didik</div>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
                         <i class="fas fa-user-tie fa-lg"></i>
                     </div>
                     <div>
-                        <div class="fs-4 fw-bold text-dark">7</div>
+                        <div class="fs-4 fw-bold text-dark">{{ $profil->jumlah_tendik ?? 7 }}</div>
                         <div class="text-muted small fw-semibold">Tendik</div>
                     </div>
                 </div>

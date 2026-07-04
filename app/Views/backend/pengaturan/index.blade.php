@@ -619,6 +619,122 @@
         </div>
     </div>
 
+    {{-- ===== SEGMEN 8: PROFIL DETAIL & AKREDITASI ===== --}}
+    <div class="col-12 mt-4">
+        <div class="card shadow-sm border-0" style="border: 2px solid #dc3545 !important;">
+            <div class="card-header d-flex align-items-center justify-content-between py-3"
+                 style="background: linear-gradient(135deg, #7f1d1d, #dc2626); border-radius: .5rem .5rem 0 0;">
+                <h6 class="mb-0 text-white fw-bold">
+                    <i class="fas fa-id-badge me-2"></i>Profil Sekolah & Akreditasi
+                    <small class="ms-2 opacity-75">(Halaman Identitas & Akreditasi Publik)</small>
+                </h6>
+                <span class="badge bg-white text-danger small">Segmen 8</span>
+            </div>
+            <div class="card-body p-4">
+                <form action="{{ url('/admin/pengaturan') }}" method="POST" id="form-profil-detail">
+                    {!! csrf_field() !!}
+                    <input type="hidden" name="section" value="profil_detail">
+
+                    {{-- === Data Profil Sekolah === --}}
+                    <h6 class="fw-bold text-danger mb-3 border-bottom pb-2">
+                        <i class="fas fa-school me-2"></i>Data Profil Sekolah
+                    </h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">NPSN</label>
+                            <input type="text" name="npsn" class="form-control" value="{{ $data->npsn ?? '20401066' }}" placeholder="20401066">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Status Sekolah</label>
+                            <select name="status_sekolah" class="form-select">
+                                @foreach(['Negeri', 'Swasta'] as $s)
+                                <option value="{{ $s }}" {{ ($data->status_sekolah ?? 'Negeri') == $s ? 'selected' : '' }}>{{ $s }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Bentuk Pendidikan</label>
+                            <select name="bentuk_pendidikan" class="form-select">
+                                @foreach(['SD', 'SMP', 'SMA', 'SMK', 'MI', 'MTs', 'MA'] as $b)
+                                <option value="{{ $b }}" {{ ($data->bentuk_pendidikan ?? 'SD') == $b ? 'selected' : '' }}>{{ $b }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Kode Pos</label>
+                            <input type="text" name="kode_pos" class="form-control" value="{{ $data->kode_pos ?? '55294' }}" placeholder="55294">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Tahun Berdiri</label>
+                            <input type="text" name="tahun_berdiri" class="form-control" value="{{ $data->tahun_berdiri ?? '1985' }}" placeholder="1985">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Luas Tanah</label>
+                            <input type="text" name="luas_tanah" class="form-control" value="{{ $data->luas_tanah ?? '2.450 m²' }}" placeholder="2.450 m²">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Jumlah Ruang Kelas</label>
+                            <input type="number" name="jumlah_kelas" class="form-control" value="{{ $data->jumlah_kelas ?? 24 }}" placeholder="24">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Jumlah Tendik</label>
+                            <input type="number" name="jumlah_tendik" class="form-control" value="{{ $data->jumlah_tendik ?? 7 }}" placeholder="7">
+                        </div>
+                    </div>
+
+                    {{-- === Standar Akreditasi === --}}
+                    <h6 class="fw-bold text-danger mb-3 border-bottom pb-2">
+                        <i class="fas fa-award me-2"></i>Data Akreditasi Sekolah
+                    </h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">No. Sertifikat Akreditasi</label>
+                            <input type="text" name="akreditasi_no_sertifikat" class="form-control" value="{{ $data->akreditasi_no_sertifikat ?? '' }}" placeholder="1234/BAN-SM/AK/XII/2022">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Tahun Akreditasi</label>
+                            <input type="text" name="akreditasi_tahun" class="form-control" value="{{ $data->akreditasi_tahun ?? '' }}" placeholder="2022">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Peringkat Akreditasi</label>
+                            <input type="text" name="akreditasi_peringkat" class="form-control" value="{{ $data->akreditasi_peringkat ?? 'A (Unggul)' }}" placeholder="A (Unggul)">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Berlaku Hingga</label>
+                            <input type="text" name="akreditasi_berlaku" class="form-control" value="{{ $data->akreditasi_berlaku ?? '' }}" placeholder="2027">
+                        </div>
+                    </div>
+
+                    <p class="text-muted small mb-2"><i class="fas fa-info-circle text-primary me-1"></i>Nilai standar akreditasi (0–100):</p>
+                    <div class="row g-3 mb-4">
+                        @foreach([
+                            ['akreditasi_standar_isi', 'Standar Isi', 93],
+                            ['akreditasi_standar_proses', 'Standar Proses', 92],
+                            ['akreditasi_standar_skl', 'Standar SKL', 95],
+                            ['akreditasi_standar_ptk', 'Standar PTK', 93],
+                            ['akreditasi_standar_sarpras', 'Standar Sarpras', 90],
+                            ['akreditasi_standar_pengelolaan', 'Standar Pengelolaan', 94],
+                            ['akreditasi_standar_pembiayaan', 'Standar Pembiayaan', 91],
+                            ['akreditasi_standar_penilaian', 'Standar Penilaian', 92],
+                        ] as [$field, $label, $default])
+                        <div class="col-md-3 col-6">
+                            <label class="form-label fw-semibold small">{{ $label }}</label>
+                            <input type="number" name="{{ $field }}" min="0" max="100" class="form-control form-control-sm"
+                                   value="{{ $data->$field ?? $default }}" placeholder="{{ $default }}">
+                        </div>
+                        @endforeach
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-danger px-5 fw-bold">
+                            <i class="fas fa-save me-2"></i>Simpan Profil & Akreditasi
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @push('scripts')
