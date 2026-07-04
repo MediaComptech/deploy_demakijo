@@ -115,11 +115,17 @@
                 <!-- Golden Badge & Download Button -->
                 <div class="col-md-4 text-center">
                     <div class="accreditation-badge mb-4">
-                        <span class="accreditation-letter">A</span>
+                        <span class="accreditation-letter">{{ $profil->akreditasi ?? 'A' }}</span>
                     </div>
-                    <a href="#" class="btn btn-primary rounded-pill px-3 py-2 fw-bold w-100 shadow-sm" onclick="alert('File sertifikat akan segera diunduh!')">
-                        <i class="fas fa-download me-2"></i>Lihat Sertifikat Akreditasi
-                    </a>
+                    @if(!empty($profil->akreditasi_sertifikat_file))
+                        <a href="{{ asset('storage/' . $profil->akreditasi_sertifikat_file) }}" target="_blank" class="btn btn-primary rounded-pill px-3 py-2 fw-bold w-100 shadow-sm">
+                            <i class="fas fa-file-pdf me-2"></i>Lihat Sertifikat Akreditasi
+                        </a>
+                    @else
+                        <a href="#" class="btn btn-secondary rounded-pill px-3 py-2 fw-bold w-100 shadow-sm disabled" onclick="alert('File sertifikat belum diunggah!'); return false;">
+                            <i class="fas fa-file-pdf me-2"></i>Sertifikat Belum Tersedia
+                        </a>
+                    @endif
                 </div>
                 
                 <!-- Keterangan & Detail table -->
@@ -127,7 +133,7 @@
                     <div class="d-flex align-items-start gap-2 mb-3">
                         <i class="fas fa-check-circle text-primary fa-lg mt-1"></i>
                         <p class="fw-bold text-dark mb-0 fs-5" style="line-height: 1.4;">
-                            SDN Demakijo 1 telah terakreditasi dengan predikat A (Unggul) berdasarkan penilaian BAN-S/M.
+                            SDN Demakijo 1 telah terakreditasi dengan predikat {{ $profil->akreditasi_peringkat ?? 'A (Unggul)' }} berdasarkan penilaian BAN-S/M.
                         </p>
                     </div>
                     <table class="table akreditasi-table table-borderless mb-0 mt-2">
@@ -135,22 +141,22 @@
                             <tr>
                                 <td width="35%" class="text-muted fw-semibold">Nomor Sertifikat</td>
                                 <td width="5%" class="text-muted">:</td>
-                                <td class="text-dark">1234/BAN-SM/AK/XII/2022</td>
+                                <td class="text-dark">{{ $profil->akreditasi_no_sertifikat ?? '1234/BAN-SM/AK/XII/2022' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Tahun Akreditasi</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">2022</td>
+                                <td class="text-dark">{{ $profil->akreditasi_tahun ?? '2022' }}</td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Peringkat</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark"><span class="badge bg-success-subtle text-success px-2 py-1 rounded">A (Unggul)</span></td>
+                                <td class="text-dark"><span class="badge bg-success-subtle text-success px-2 py-1 rounded">{{ $profil->akreditasi_peringkat ?? 'A (Unggul)' }}</span></td>
                             </tr>
                             <tr>
                                 <td class="text-muted fw-semibold">Berlaku Hingga</td>
                                 <td class="text-muted">:</td>
-                                <td class="text-dark">2027</td>
+                                <td class="text-dark">{{ $profil->akreditasi_berlaku ?? '2027' }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -163,14 +169,14 @@
                 
                 @php
                     $standards = [
-                        ['name' => 'Standar Isi', 'score' => 93],
-                        ['name' => 'Standar Proses', 'score' => 92],
-                        ['name' => 'Standar Kompetensi Lulusan', 'score' => 95],
-                        ['name' => 'Standar Pendidik & Tenaga Kependidikan', 'score' => 93],
-                        ['name' => 'Standar Sarana & Prasarana', 'score' => 90],
-                        ['name' => 'Standar Pengelolaan', 'score' => 94],
-                        ['name' => 'Standar Pembiayaan', 'score' => 91],
-                        ['name' => 'Standar Penilaian Pendidikan', 'score' => 92]
+                        ['name' => 'Standar Isi', 'score' => $profil->akreditasi_standar_isi ?? 93],
+                        ['name' => 'Standar Proses', 'score' => $profil->akreditasi_standar_proses ?? 92],
+                        ['name' => 'Standar Kompetensi Lulusan', 'score' => $profil->akreditasi_standar_skl ?? 95],
+                        ['name' => 'Standar Pendidik & Tenaga Kependidikan', 'score' => $profil->akreditasi_standar_ptk ?? 93],
+                        ['name' => 'Standar Sarana & Prasarana', 'score' => $profil->akreditasi_standar_sarpras ?? 90],
+                        ['name' => 'Standar Pengelolaan', 'score' => $profil->akreditasi_standar_pengelolaan ?? 94],
+                        ['name' => 'Standar Pembiayaan', 'score' => $profil->akreditasi_standar_pembiayaan ?? 91],
+                        ['name' => 'Standar Penilaian Pendidikan', 'score' => $profil->akreditasi_standar_penilaian ?? 92]
                     ];
                 @endphp
                 

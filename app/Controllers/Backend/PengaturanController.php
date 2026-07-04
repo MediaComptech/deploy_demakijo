@@ -56,6 +56,7 @@ class PengaturanController extends Controller
                 'akreditasi_standar_pengelolaan' => ['integer'],
                 'akreditasi_standar_pembiayaan'  => ['integer'],
                 'akreditasi_standar_penilaian'   => ['integer'],
+                'akreditasi_sertifikat_file'  => ['string', 255],
             ];
             foreach ($profilCols as $col => $colOpts) {
                 $type = $colOpts[0];
@@ -195,6 +196,17 @@ class PengaturanController extends Controller
                     if ($data->$field) native_storage_delete($data->$field);
                     $input[$field] = null;
                 }
+            }
+        }
+
+        // === Handle Sertifikat Akreditasi File ===
+        if ($section === 'profil_detail') {
+            if ($request->hasFile('akreditasi_sertifikat_file')) {
+                if ($data->akreditasi_sertifikat_file) native_storage_delete($data->akreditasi_sertifikat_file);
+                $input['akreditasi_sertifikat_file'] = $request->file('akreditasi_sertifikat_file')->store('uploads', 'public');
+            } elseif ($request->input('delete_akreditasi_sertifikat_file')) {
+                if ($data->akreditasi_sertifikat_file) native_storage_delete($data->akreditasi_sertifikat_file);
+                $input['akreditasi_sertifikat_file'] = null;
             }
         }
 

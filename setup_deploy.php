@@ -257,6 +257,18 @@ if ($action === 'run_migrations' || $action === 'all') {
         log_line("Migrasi 4 tidak ditemukan di {$m4}, melewati...");
     }
 
+    // 5. Jalankan migrasi Tambah File Sertifikat Akreditasi
+    $m5 = $PUBLIC_HTML . '/migrate_add_sertifikat_file_to_settings.php';
+    if (file_exists($m5)) {
+        ob_start();
+        include $m5;
+        $output = ob_get_clean();
+        echo "<pre style='background:#f8fafc; padding:10px; border-radius:6px; border:1px solid #e2e8f0; font-family:monospace; color:#333;'>" . htmlspecialchars($output) . "</pre>";
+        log_line("Migrasi 5 (File Sertifikat Akreditasi) selesai!");
+    } else {
+        log_line("Migrasi 5 tidak ditemukan di {$m5}, melewati...");
+    }
+
     echo '</div>';
 }
 

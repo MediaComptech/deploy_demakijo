@@ -43,7 +43,8 @@ Router::get('/sejarah', function () {
 });
 
 Router::get('/akreditasi-sekolah', function () {
-    return \App\Core\View::render('publik.akreditasi');
+    $profil = \App\Models\SettingWebsite::first();
+    return \App\Core\View::render('publik.akreditasi', compact('profil'));
 });
 
 Router::get('/sarana-prasarana', function () {

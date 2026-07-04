@@ -88,6 +88,16 @@
             border-radius: 0.5rem !important;
             overflow: hidden !important;
         }
+        .card-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+        .card-header::before,
+        .card-header::after {
+            display: none !important;
+            content: none !important;
+        }
     </style>
 </head>
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">

@@ -631,7 +631,7 @@
                 <span class="badge bg-white text-danger small">Segmen 8</span>
             </div>
             <div class="card-body p-4">
-                <form action="{{ url('/admin/pengaturan') }}" method="POST" id="form-profil-detail">
+                <form action="{{ url('/admin/pengaturan') }}" method="POST" id="form-profil-detail" enctype="multipart/form-data">
                     {!! csrf_field() !!}
                     <input type="hidden" name="section" value="profil_detail">
 
@@ -702,6 +702,24 @@
                         <div class="col-md-3">
                             <label class="form-label fw-semibold">Berlaku Hingga</label>
                             <input type="text" name="akreditasi_berlaku" class="form-control" value="{{ $data->akreditasi_berlaku ?? '' }}" placeholder="2027">
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label class="form-label fw-semibold">File Sertifikat Akreditasi <small class="text-muted fw-normal">(PDF atau Gambar)</small></label>
+                            @if(!empty($data->akreditasi_sertifikat_file))
+                                <div class="mb-2 d-flex align-items-center gap-3">
+                                    <a href="{{ asset('storage/' . $data->akreditasi_sertifikat_file) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-file-pdf me-1"></i>Lihat Sertifikat Saat Ini
+                                    </a>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="delete_akreditasi_sertifikat_file" id="del_sertifikat_file">
+                                        <label class="form-check-label text-danger small" for="del_sertifikat_file">
+                                            <i class="fas fa-trash me-1"></i>Hapus sertifikat ini
+                                        </label>
+                                    </div>
+                                </div>
+                            @endif
+                            <input type="file" name="akreditasi_sertifikat_file" class="form-control" accept=".pdf,image/*">
+                            <small class="text-muted"><i class="fas fa-info-circle text-primary me-1"></i>Maks. 2MB. Format: PDF, JPG, PNG, WebP.</small>
                         </div>
                     </div>
 
