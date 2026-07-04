@@ -707,7 +707,8 @@
 
                     <p class="text-muted small mb-2"><i class="fas fa-info-circle text-primary me-1"></i>Nilai standar akreditasi (0–100):</p>
                     <div class="row g-3 mb-4">
-                        @foreach([
+                        @php
+                        $standarAkreditasi = [
                             ['akreditasi_standar_isi', 'Standar Isi', 93],
                             ['akreditasi_standar_proses', 'Standar Proses', 92],
                             ['akreditasi_standar_skl', 'Standar SKL', 95],
@@ -716,11 +717,14 @@
                             ['akreditasi_standar_pengelolaan', 'Standar Pengelolaan', 94],
                             ['akreditasi_standar_pembiayaan', 'Standar Pembiayaan', 91],
                             ['akreditasi_standar_penilaian', 'Standar Penilaian', 92],
-                        ] as [$field, $label, $default])
+                        ];
+                        @endphp
+                        @foreach($standarAkreditasi as $standarItem)
+                        @php $sField = $standarItem[0]; $sLabel = $standarItem[1]; $sDefault = $standarItem[2]; @endphp
                         <div class="col-md-3 col-6">
-                            <label class="form-label fw-semibold small">{{ $label }}</label>
-                            <input type="number" name="{{ $field }}" min="0" max="100" class="form-control form-control-sm"
-                                   value="{{ $data->$field ?? $default }}" placeholder="{{ $default }}">
+                            <label class="form-label fw-semibold small">{{ $sLabel }}</label>
+                            <input type="number" name="{{ $sField }}" min="0" max="100" class="form-control form-control-sm"
+                                   value="{{ $data->$sField ?? $sDefault }}" placeholder="{{ $sDefault }}">
                         </div>
                         @endforeach
                     </div>
