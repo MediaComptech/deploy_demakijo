@@ -4,49 +4,148 @@
 
 {{-- Hero Carousel Section --}}
 <style>
-    .hero-slide-item {
-        background-size: cover !important;
-        background-position: center !important;
-        padding: 100px 0 80px;
+    /* ===== Hero Slider - Boxed Container Layout ===== */
+    .hero-boxed-wrapper {
+        padding: 20px 0 0;
+        background: #f1f5f9;
+    }
+    .hero-boxed-wrapper .container {
+        max-width: 1280px;
+    }
+    #heroCarousel {
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+
+    /* Slide Image - proportional, no cropping */
+    .hero-slide-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 520px;
+        object-fit: contain;
+        background: #0a1628;
+    }
+
+    /* Overlay on top of image for text */
+    .hero-slide-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.55) 100%);
+        padding: 20px;
+    }
+    .hero-slide-text {
+        text-align: center;
         color: white;
+        width: 100%;
+        max-width: 750px;
     }
     .hero-title {
         font-family: 'Fredoka One', cursive;
-        font-size: 2.8rem;
+        font-size: 2.5rem;
         line-height: 1.2;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
+    .hero-desc {
+        text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+
+    /* Custom-image slides: no overlay text (image already has its own design) */
+    .hero-slide-custom .hero-slide-overlay {
+        background: linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.4) 100%);
+    }
+    .hero-slide-custom .hero-slide-text-inner {
+        display: none;
+    }
+    /* Custom slides still show the action buttons at the bottom */
+    .hero-slide-custom .hero-btn-group {
+        display: flex !important;
+    }
+
+    /* Custom Bootstrap carousel controls */
+    #heroCarousel .carousel-control-prev,
+    #heroCarousel .carousel-control-next {
+        width: 44px;
+        height: 44px;
+        background: rgba(255,222,89,0.85);
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 1;
+        margin: 0 12px;
+        transition: background 0.2s;
+    }
+    #heroCarousel .carousel-control-prev:hover,
+    #heroCarousel .carousel-control-next:hover {
+        background: #ffde59;
+    }
+    #heroCarousel .carousel-control-prev-icon,
+    #heroCarousel .carousel-control-next-icon {
+        filter: invert(20%) sepia(60%) saturate(500%) hue-rotate(195deg);
+        width: 20px;
+        height: 20px;
+    }
+    #heroCarousel .carousel-indicators {
+        margin-bottom: 10px;
+    }
+    #heroCarousel .carousel-indicators button {
+        width: 28px;
+        height: 4px;
+        border-radius: 2px;
+        background: rgba(255,255,255,0.5);
+        border: none;
+        margin: 0 3px;
+        transition: all 0.3s;
+    }
+    #heroCarousel .carousel-indicators .active {
+        background: #ffde59;
+        width: 40px;
+    }
+
     @media (max-width: 768px) {
-        .hero-slide-item {
-            padding: 50px 15px 40px !important;
+        .hero-boxed-wrapper {
+            padding: 12px 0 0;
+        }
+        #heroCarousel {
+            border-radius: 10px;
+        }
+        .hero-slide-img {
+            max-height: 240px;
         }
         .hero-title {
-            font-size: 1.65rem !important;
-            margin-bottom: 0.75rem !important;
+            font-size: 1.4rem !important;
         }
         .hero-desc {
-            font-size: 0.9rem !important;
-            margin-bottom: 1.25rem !important;
-        }
-        .hero-btn-group {
-            flex-direction: column;
-            width: 100%;
-            max-width: 280px;
-            margin: 0 auto;
+            font-size: 0.82rem !important;
         }
         .hero-btn-group .btn {
-            width: 100%;
-            font-size: 0.9rem !important;
-            padding: 10px 20px !important;
+            font-size: 0.82rem !important;
+            padding: 7px 16px !important;
+        }
+        #heroCarousel .carousel-control-prev,
+        #heroCarousel .carousel-control-next {
+            width: 32px;
+            height: 32px;
+            margin: 0 4px;
         }
     }
 </style>
-<div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-    <div class="carousel-indicators">
+{{-- Boxed hero slider wrapper --}}
+<div class="hero-boxed-wrapper">
+    <div class="container">
         @php
             $sliders = [];
+            $isCustomSlider = false;
             for ($i = 1; $i <= 5; $i++) {
                 $f = 'slider_'.$i;
-                if ($setting && $setting->$f) $sliders[] = asset('storage/'.$setting->$f);
+                if ($setting && $setting->$f) {
+                    $sliders[] = asset('storage/'.$setting->$f);
+                    $isCustomSlider = true;
+                }
             }
             if (empty($sliders)) {
                 $sliders = [
@@ -70,42 +169,67 @@
                 'Suasana sekolah yang kondusif, aman, dan menyenangkan untuk semua siswa.',
             ];
         @endphp
-        @foreach($sliders as $idx => $s)
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $idx }}"
-            class="{{ $idx == 0 ? 'active' : '' }}" aria-label="Slide {{ $idx+1 }}"></button>
-        @endforeach
-    </div>
-    <div class="carousel-inner">
-        @foreach($sliders as $idx => $slide)
-        <div class="carousel-item {{ $idx == 0 ? 'active' : '' }}">
-            <div class="hero-slide-item" style="background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.55)), url('{{ $slide }}');">
-                <div class="container text-center" data-aos="zoom-in">
-                    @if($idx == 0)
-                        <span class="badge bg-warning text-dark px-3 py-2 mb-3 rounded-pill fw-bold" style="letter-spacing:1px; font-size:0.75rem;">BERANDA SEKOLAH</span>
-                    @endif
-                    <h1 class="fw-bold mb-3 text-white hero-title">
-                        {{ $slideTitles[$idx] ?? 'SDN Demakijo 1' }}
-                    </h1>
-                    <p class="lead mb-4 mx-auto hero-desc" style="max-width:750px;">
-                        {{ $slideDescs[$idx] ?? '' }}
-                    </p>
-                    <div class="d-flex justify-content-center gap-3 hero-btn-group">
-                        <a href="/profil" class="btn btn-warning btn-lg px-4 fw-bold shadow-sm rounded-pill text-primary">Profil Kami</a>
-                        <a href="/ppdb-online" class="btn btn-outline-light btn-lg px-4 fw-bold shadow-sm rounded-pill">Daftar PPDB</a>
+
+        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+
+            {{-- Slide indicators --}}
+            <div class="carousel-indicators">
+                @foreach($sliders as $idx => $s)
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $idx }}"
+                    class="{{ $idx == 0 ? 'active' : '' }}" aria-label="Slide {{ $idx+1 }}"></button>
+                @endforeach
+            </div>
+
+            {{-- Slides --}}
+            <div class="carousel-inner">
+                @foreach($sliders as $idx => $slide)
+                <div class="carousel-item {{ $idx == 0 ? 'active' : '' }}">
+                    <div class="position-relative">
+                        {{-- Gambar: proporsional, tidak dipotong --}}
+                        <img src="{{ $slide }}" alt="Slide {{ $idx+1 }}" class="hero-slide-img">
+
+                        {{-- Overlay layer --}}
+                        <div class="hero-slide-overlay {{ $isCustomSlider ? 'hero-slide-custom' : '' }}">
+                            <div class="hero-slide-text" data-aos="zoom-in">
+
+                                {{-- Teks bawaan sistem — disembunyikan jika gambar kustom --}}
+                                <div class="hero-slide-text-inner">
+                                    @if($idx == 0)
+                                        <span class="badge bg-warning text-dark px-3 py-2 mb-3 rounded-pill fw-bold"
+                                              style="letter-spacing:1px; font-size:0.75rem;">BERANDA SEKOLAH</span>
+                                    @endif
+                                    <h1 class="fw-bold mb-3 text-white hero-title">
+                                        {{ $slideTitles[$idx] ?? 'SDN Demakijo 1' }}
+                                    </h1>
+                                    <p class="lead mb-4 mx-auto hero-desc" style="max-width:700px;">
+                                        {{ $slideDescs[$idx] ?? '' }}
+                                    </p>
+                                </div>
+
+                                {{-- Tombol aksi — selalu tampil --}}
+                                <div class="d-flex justify-content-center gap-3 hero-btn-group flex-wrap">
+                                    <a href="/profil" class="btn btn-warning btn-lg px-4 fw-bold shadow-sm rounded-pill text-primary">Profil Kami</a>
+                                    <a href="/ppdb-online" class="btn btn-outline-light btn-lg px-4 fw-bold shadow-sm rounded-pill">Daftar PPDB</a>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
+                @endforeach
             </div>
+
+            {{-- Tombol Navigasi --}}
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
-        @endforeach
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
 </div>
 
 {{-- Kenapa Memilih Kami Section --}}
