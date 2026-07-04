@@ -1,3 +1,7 @@
+<?php
+$siteConfig = \App\Models\SettingWebsite::first();
+$loginBg = ($siteConfig && $siteConfig->gambar_header) ? asset('storage/'.$siteConfig->gambar_header) : 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80';
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -35,7 +39,7 @@
             display: flex;
         }
         .login-image {
-            background: url('https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80') center/cover;
+            background: url('<?= $loginBg ?>') center/cover;
             width: 50%;
             display: none;
             position: relative;
