@@ -245,6 +245,18 @@ if ($action === 'run_migrations' || $action === 'all') {
         log_line("Migrasi 3 tidak ditemukan di {$m3}, melewati...");
     }
 
+    // 4. Jalankan migrasi Tambah URL GDrive Galeri
+    $m4 = $PUBLIC_HTML . '/migrate_add_gdrive_to_galeris.php';
+    if (file_exists($m4)) {
+        ob_start();
+        include $m4;
+        $output = ob_get_clean();
+        echo "<pre style='background:#f8fafc; padding:10px; border-radius:6px; border:1px solid #e2e8f0; font-family:monospace; color:#333;'>" . htmlspecialchars($output) . "</pre>";
+        log_line("Migrasi 4 (Kolom Google Drive Galeri) selesai!");
+    } else {
+        log_line("Migrasi 4 tidak ditemukan di {$m4}, melewati...");
+    }
+
     echo '</div>';
 }
 
