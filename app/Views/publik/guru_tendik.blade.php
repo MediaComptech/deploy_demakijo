@@ -139,7 +139,7 @@ function guruCardIcon($idx) {
                                 </div>
                             </div>
                             <h6 class="fw-bold text-muted mb-3" style="font-size:.85rem;letter-spacing:1px;">INFORMASI PRIBADI</h6>
-                            <div class="row mb-2"><div class="col-5 text-muted small">NIP</div><div class="col-7 small fw-bold text-dark">{{ $item->nip ?? '-' }}</div></div>
+                            <div class="row mb-2"><div class="col-5 text-muted small">NIP</div><div class="col-7 small fw-bold text-dark">{{ $item->nip ? substr($item->nip,0,4).str_repeat('*',max(0,strlen($item->nip)-4)) : '-' }}</div></div>
                             <div class="row mb-2"><div class="col-5 text-muted small">Jabatan</div><div class="col-7 small fw-bold text-dark">{{ $item->jabatan }}</div></div>
                             @if($item->pendidikan)
                             <div class="row mb-2"><div class="col-5 text-muted small">Pendidikan</div><div class="col-7 small fw-bold text-dark">{{ $item->pendidikan }}</div></div>

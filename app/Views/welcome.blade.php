@@ -287,7 +287,7 @@
                             <h5 class="text-white fw-bold mb-0">{{ $setting->nama_kepsek ?? 'Kepala Sekolah' }}</h5>
                             <small class="text-warning">Kepala Sekolah</small>
                             @if($setting && $setting->nip_kepsek)
-                            <small class="text-white-50 mt-1">NIP: {{ $setting->nip_kepsek }}</small>
+                            <small class="text-white-50 mt-1">NIP: {{ substr($setting->nip_kepsek,0,4).str_repeat('*',max(0,strlen($setting->nip_kepsek)-4)) }}</small>
                             @endif
                         </div>
                         <div class="col-md-8 p-4 p-lg-5 bg-white">
