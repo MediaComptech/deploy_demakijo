@@ -158,6 +158,15 @@
                                 <td class="text-muted">:</td>
                                 <td class="text-dark">{{ $profil->akreditasi_berlaku ?? '2027' }}</td>
                             </tr>
+                            <tr>
+                                <td class="text-muted fw-semibold">Link BAN-S/M</td>
+                                <td class="text-muted">:</td>
+                                <td>
+                                    <a href="https://ban-pdm.id/satuanpendidikan/20401675" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-bold text-primary">
+                                        <i class="fas fa-external-link-alt me-1"></i>Lihat Data BAN-S/M
+                                    </a>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

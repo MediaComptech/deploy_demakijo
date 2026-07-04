@@ -128,15 +128,6 @@
                                 <td class="text-muted">:</td>
                                 <td class="text-dark">{{ $profil->luas_tanah ?? '2.450 m²' }}</td>
                             </tr>
-                            <tr>
-                                <td class="text-muted fw-semibold">Akreditasi BAN-S/M</td>
-                                <td class="text-muted">:</td>
-                                <td>
-                                    <a href="https://ban-pdm.id/satuanpendidikan/20401675" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-semibold text-primary">
-                                        <i class="fas fa-external-link-alt me-1"></i>Lihat Data BAN-S/M
-                                    </a>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
