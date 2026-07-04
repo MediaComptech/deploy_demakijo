@@ -57,7 +57,9 @@ class PengaturanController extends Controller
                 'akreditasi_standar_pembiayaan'  => ['integer'],
                 'akreditasi_standar_penilaian'   => ['integer'],
             ];
-            foreach ($profilCols as $col => [$type, $len = null]) {
+            foreach ($profilCols as $col => $colOpts) {
+                $type = $colOpts[0];
+                $len  = $colOpts[1] ?? null;
                 if (!$schema->hasColumn('setting_websites', $col)) {
                     $schema->table('setting_websites', function ($table) use ($col, $type, $len) {
                         if ($type === 'string') $table->string($col, $len ?? 255)->nullable();
