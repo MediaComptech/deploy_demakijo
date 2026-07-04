@@ -355,72 +355,193 @@
     {{-- ===== SEGMEN 7: GAMBAR HALAMAN (HEADER & IDENTITAS) ===== --}}
     <div class="col-12 mt-4">
         <div class="card shadow-sm border-0">
-            <div class="card-header d-flex align-items-center justify-content-between py-3"
+            <div class="card-header py-3"
                  style="background: linear-gradient(135deg, #1e293b, #334155); border-radius: .5rem .5rem 0 0;">
-                <h6 class="mb-0 text-white fw-bold">
-                    <i class="fas fa-panorama me-2"></i>Gambar Halaman Sub-Page & Identitas Sekolah
-                    <small class="ms-2 opacity-75">(Agar Tampilan Tidak Monoton)</small>
-                </h6>
-                <span class="badge bg-white text-dark small">Segmen 7</span>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="mb-0 text-white fw-bold">
+                            <i class="fas fa-panorama me-2"></i>Gambar Halaman Publik
+                        </h6>
+                        <small class="text-white opacity-60">Ganti foto Hero, Banner halaman & Foto Identitas Sekolah</small>
+                    </div>
+                    <span class="badge bg-white text-dark small">Segmen 7</span>
+                </div>
             </div>
-            <div class="card-body">
-                <form action="{{ url('/admin/pengaturan') }}" method="POST" enctype="multipart/form-data">
+            <div class="card-body p-4">
+
+                {{-- Info Banner --}}
+                <div class="alert alert-info border-0 rounded-3 d-flex align-items-start gap-3 mb-4" style="background:#eff6ff;">
+                    <i class="fas fa-lightbulb text-info fs-5 mt-1"></i>
+                    <div class="small">
+                        <strong class="d-block mb-1">Panduan Upload Gambar</strong>
+                        <ul class="mb-0 ps-3">
+                            <li><strong>Gambar Header Sub-Page</strong> — latar belakang biru/foto di atas halaman Guru, Berita, Agenda, Galeri, dll. Ukuran ideal: <strong>1920×700px</strong></li>
+                            <li><strong>Foto Identitas Sekolah</strong> — foto gedung/kegiatan yang tampil di halaman Identitas Sekolah, sebelah kanan tabel data. Ukuran ideal: <strong>800×500px</strong></li>
+                        </ul>
+                        Format: <strong>JPG / PNG</strong> &bull; Maks. <strong>2 MB</strong> per gambar
+                    </div>
+                </div>
+
+                <form action="{{ url('/admin/pengaturan') }}" method="POST" enctype="multipart/form-data" id="form-gambar-halaman">
                     {!! csrf_field() !!}
                     <input type="hidden" name="section" value="gambar_halaman">
+
                     <div class="row g-4">
-                        <!-- Gambar Header Subpage -->
+
+                        {{-- ===== SLOT 1: Gambar Header Sub-Page ===== --}}
                         <div class="col-md-6">
-                            <div class="p-3 border rounded-3 bg-light">
-                                <label class="form-label fw-semibold text-dark">
-                                    <i class="fas fa-image text-primary me-1"></i>Gambar Header Sub-Page
-                                </label>
-                                <p class="small text-muted mb-2">Ditampilkan sebagai latar belakang header judul di semua halaman publik (Berita, Agenda, Galeri, dll).</p>
-                                @if($data->gambar_header)
-                                    <div class="mb-3 position-relative">
-                                        <img src="{{ asset('storage/'.$data->gambar_header) }}" class="img-fluid rounded shadow-sm" style="max-height:140px; width:100%; object-fit:cover;">
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" name="delete_gambar_header" id="del_gh">
-                                            <label class="form-check-label text-danger small" for="del_gh"><i class="fas fa-trash-alt me-1"></i>Hapus & gunakan gambar default</label>
+                            <div class="card border h-100 rounded-3 overflow-hidden shadow-sm">
+                                <div class="card-header d-flex align-items-center gap-2 py-2 px-3"
+                                     style="background:#f1f5ff; border-bottom:2px solid #0d6efd;">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white"
+                                         style="width:30px;height:30px;background:#0d6efd;flex-shrink:0;">
+                                        <i class="fas fa-images" style="font-size:0.75rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold small text-dark">Gambar Header Sub-Page</div>
+                                        <div class="text-muted" style="font-size:0.7rem;">Ditampilkan di semua halaman selain beranda</div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    {{-- Preview Gambar Saat Ini --}}
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-semibold text-muted text-uppercase" style="letter-spacing:.5px;">Gambar Saat Ini</label>
+                                        @if($data->gambar_header)
+                                            <div class="position-relative rounded-3 overflow-hidden" style="height:160px;">
+                                                <img src="{{ asset('storage/'.$data->gambar_header) }}"
+                                                     class="w-100 h-100" style="object-fit:cover;" alt="Header saat ini">
+                                                <div class="position-absolute bottom-0 start-0 end-0 px-2 py-1"
+                                                     style="background:rgba(0,0,0,0.5);">
+                                                    <span class="text-white" style="font-size:0.7rem;">
+                                                        <i class="fas fa-check-circle text-success me-1"></i>Gambar custom terpasang
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" name="delete_gambar_header" id="del_gh">
+                                                <label class="form-check-label text-danger small" for="del_gh">
+                                                    <i class="fas fa-trash-alt me-1"></i>Hapus &amp; kembali ke gambar default
+                                                </label>
+                                            </div>
+                                        @else
+                                            <div class="rounded-3 d-flex flex-column align-items-center justify-content-center text-center"
+                                                 style="height:160px; border:2px dashed #cbd5e1; background:#f8fafc;">
+                                                <i class="fas fa-image text-muted fa-2x mb-2 opacity-50"></i>
+                                                <span class="small text-muted">Menggunakan Gambar Default</span>
+                                                <span class="text-muted" style="font-size:0.7rem;">(foto sekolah dari Unsplash)</span>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- Preview Live --}}
+                                    <div id="preview-wrap-gambar_header" class="mb-3" style="display:none;">
+                                        <label class="form-label small fw-semibold text-primary text-uppercase" style="letter-spacing:.5px;">
+                                            <i class="fas fa-eye me-1"></i>Preview Gambar Baru
+                                        </label>
+                                        <div class="rounded-3 overflow-hidden" style="height:120px;">
+                                            <img id="preview-gambar_header" src="" class="w-100 h-100" style="object-fit:cover;" alt="Preview">
                                         </div>
+                                        <div id="info-gambar_header" class="small text-success mt-1"></div>
                                     </div>
-                                @else
-                                    <div class="mb-2 bg-white rounded d-flex align-items-center justify-content-center border-dashed" style="height:100px; border:2px dashed #cbd5e1;">
-                                        <span class="small text-muted"><i class="fas fa-info-circle me-1"></i>Menggunakan Gambar Default</span>
+
+                                    {{-- Input File --}}
+                                    <label class="form-label small fw-semibold text-dark">
+                                        <i class="fas fa-upload me-1 text-primary"></i>Pilih Gambar Baru
+                                    </label>
+                                    <input type="file" name="gambar_header" id="file-gambar_header"
+                                           class="form-control form-control-sm" accept="image/jpeg,image/png,image/webp"
+                                           onchange="previewImage(this, 'gambar_header')">
+                                    <div class="small text-muted mt-1">
+                                        <i class="fas fa-info-circle me-1 text-primary"></i>Rekomendasi: <strong>1920×700px</strong> &bull; JPG/PNG &bull; maks. 2MB
                                     </div>
-                                @endif
-                                <input type="file" name="gambar_header" class="form-control form-control-sm" accept="image/*">
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Gambar Identitas Sekolah -->
+                        {{-- ===== SLOT 2: Foto Identitas Sekolah ===== --}}
                         <div class="col-md-6">
-                            <div class="p-3 border rounded-3 bg-light">
-                                <label class="form-label fw-semibold text-dark">
-                                    <i class="fas fa-id-card text-success me-1"></i>Foto Halaman Identitas Sekolah
-                                </label>
-                                <p class="small text-muted mb-2">Foto kegiatan / gedung yang ditampilkan di bagian kanan atas halaman Identitas Sekolah.</p>
-                                @if($data->foto_identitas)
-                                    <div class="mb-3 position-relative">
-                                        <img src="{{ asset('storage/'.$data->foto_identitas) }}" class="img-fluid rounded shadow-sm" style="max-height:140px; width:100%; object-fit:cover;">
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" name="delete_foto_identitas" id="del_fi">
-                                            <label class="form-check-label text-danger small" for="del_fi"><i class="fas fa-trash-alt me-1"></i>Hapus & gunakan foto default</label>
+                            <div class="card border h-100 rounded-3 overflow-hidden shadow-sm">
+                                <div class="card-header d-flex align-items-center gap-2 py-2 px-3"
+                                     style="background:#f0fdf4; border-bottom:2px solid #16a34a;">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white"
+                                         style="width:30px;height:30px;background:#16a34a;flex-shrink:0;">
+                                        <i class="fas fa-id-card" style="font-size:0.75rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold small text-dark">Foto Identitas Sekolah</div>
+                                        <div class="text-muted" style="font-size:0.7rem;">Tampil di halaman Identitas Sekolah</div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    {{-- Preview Gambar Saat Ini --}}
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-semibold text-muted text-uppercase" style="letter-spacing:.5px;">Foto Saat Ini</label>
+                                        @if($data->foto_identitas)
+                                            <div class="position-relative rounded-3 overflow-hidden" style="height:160px;">
+                                                <img src="{{ asset('storage/'.$data->foto_identitas) }}"
+                                                     class="w-100 h-100" style="object-fit:cover;" alt="Foto identitas saat ini">
+                                                <div class="position-absolute bottom-0 start-0 end-0 px-2 py-1"
+                                                     style="background:rgba(0,0,0,0.5);">
+                                                    <span class="text-white" style="font-size:0.7rem;">
+                                                        <i class="fas fa-check-circle text-success me-1"></i>Foto custom terpasang
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" name="delete_foto_identitas" id="del_fi">
+                                                <label class="form-check-label text-danger small" for="del_fi">
+                                                    <i class="fas fa-trash-alt me-1"></i>Hapus &amp; kembali ke foto default
+                                                </label>
+                                            </div>
+                                        @else
+                                            <div class="rounded-3 d-flex flex-column align-items-center justify-content-center text-center"
+                                                 style="height:160px; border:2px dashed #cbd5e1; background:#f8fafc;">
+                                                <i class="fas fa-id-card text-muted fa-2x mb-2 opacity-50"></i>
+                                                <span class="small text-muted">Menggunakan Foto Default</span>
+                                                <span class="text-muted" style="font-size:0.7rem;">(foto wisuda dari Unsplash)</span>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- Preview Live --}}
+                                    <div id="preview-wrap-foto_identitas" class="mb-3" style="display:none;">
+                                        <label class="form-label small fw-semibold text-success text-uppercase" style="letter-spacing:.5px;">
+                                            <i class="fas fa-eye me-1"></i>Preview Foto Baru
+                                        </label>
+                                        <div class="rounded-3 overflow-hidden" style="height:120px;">
+                                            <img id="preview-foto_identitas" src="" class="w-100 h-100" style="object-fit:cover;" alt="Preview">
                                         </div>
+                                        <div id="info-foto_identitas" class="small text-success mt-1"></div>
                                     </div>
-                                @else
-                                    <div class="mb-2 bg-white rounded d-flex align-items-center justify-content-center border-dashed" style="height:100px; border:2px dashed #cbd5e1;">
-                                        <span class="small text-muted"><i class="fas fa-info-circle me-1"></i>Menggunakan Foto Default</span>
+
+                                    {{-- Input File --}}
+                                    <label class="form-label small fw-semibold text-dark">
+                                        <i class="fas fa-upload me-1 text-success"></i>Pilih Foto Baru
+                                    </label>
+                                    <input type="file" name="foto_identitas" id="file-foto_identitas"
+                                           class="form-control form-control-sm" accept="image/jpeg,image/png,image/webp"
+                                           onchange="previewImage(this, 'foto_identitas')">
+                                    <div class="small text-muted mt-1">
+                                        <i class="fas fa-info-circle me-1 text-success"></i>Rekomendasi: <strong>800×500px</strong> &bull; JPG/PNG &bull; maks. 2MB
                                     </div>
-                                @endif
-                                <input type="file" name="foto_identitas" class="form-control form-control-sm" accept="image/*">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-12 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-dark px-4">
-                                <i class="fas fa-save me-2"></i>Simpan Gambar Halaman
-                            </button>
+                        {{-- Tombol Simpan --}}
+                        <div class="col-12">
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-3"
+                                 style="background:#f8fafc; border:1px dashed #cbd5e1;">
+                                <div class="small text-muted">
+                                    <i class="fas fa-circle-info me-1 text-primary"></i>
+                                    Perubahan akan langsung tampil di website publik setelah disimpan.
+                                </div>
+                                <button type="submit" class="btn btn-dark px-5 fw-bold" id="btn-simpan-seg7">
+                                    <i class="fas fa-save me-2"></i>Simpan Gambar Halaman
+                                </button>
+                            </div>
                         </div>
+
                     </div>
                 </form>
             </div>
@@ -428,5 +549,61 @@
     </div>
 
 </div>
+
+@push('scripts')
+<script>
+/**
+ * Live preview gambar saat file dipilih (Segmen 7)
+ */
+function previewImage(input, fieldName) {
+    const file = input.files[0];
+    if (!file) return;
+
+    // Validasi tipe file
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+        alert('Format file tidak didukung. Gunakan JPG, PNG, atau WebP.');
+        input.value = '';
+        return;
+    }
+
+    // Validasi ukuran (maks. 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        alert('Ukuran file terlalu besar. Maks. 2MB.\nUkuran file Anda: ' + (file.size / 1024 / 1024).toFixed(2) + ' MB');
+        input.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const previewWrap = document.getElementById('preview-wrap-' + fieldName);
+        const previewImg  = document.getElementById('preview-' + fieldName);
+        const infoEl      = document.getElementById('info-' + fieldName);
+
+        if (previewWrap) previewWrap.style.display = 'block';
+        if (previewImg)  previewImg.src = e.target.result;
+        if (infoEl) {
+            const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+            infoEl.innerHTML = '<i class="fas fa-check-circle me-1"></i><strong>' + file.name + '</strong> &bull; ' + sizeMB + ' MB';
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+// Konfirmasi sebelum submit jika ada checkbox delete yang tercentang
+document.getElementById('form-gambar-halaman').addEventListener('submit', function(e) {
+    const delGH = document.getElementById('del_gh');
+    const delFI = document.getElementById('del_fi');
+    const toDelete = [];
+    if (delGH && delGH.checked) toDelete.push('Gambar Header Sub-Page');
+    if (delFI && delFI.checked) toDelete.push('Foto Identitas Sekolah');
+    if (toDelete.length > 0) {
+        if (!confirm('Anda akan menghapus:\n• ' + toDelete.join('\n• ') + '\n\nLanjutkan?')) {
+            e.preventDefault();
+        }
+    }
+});
+</script>
+@endpush
 
 @endsection

@@ -20,8 +20,9 @@
    - [VPS dengan Nginx](#3-vps-dengan-nginx)
 5. [Panduan Pengembangan](#-panduan-pengembangan)
 6. [Panduan untuk AI / Junior Programmer](#-panduan-untuk-ai--junior-programmer)
-7. [Struktur Direktori](#-struktur-direktori)
-8. [Kontribusi](#-kontribusi)
+7. [Panduan Pengelolaan Gambar (Hero & Profil)](#-panduan-pengelolaan-gambar-hero--profil)
+8. [Struktur Direktori](#-struktur-direktori)
+9. [Kontribusi](#-kontribusi)
 
 ---
 
@@ -445,6 +446,29 @@ redirect('/admin/berita')->with('success', 'Data berhasil disimpan!');
 ### Cara Menambah Field ke Tabel
 
 Gunakan file migrasi manual atau modifikasi langsung di phpMyAdmin / DBeaver. Kemudian tambahkan field ke array `$fillable` di Model.
+
+---
+
+## 🖼️ Panduan Pengelolaan Gambar (Hero & Profil)
+
+Untuk mengubah gambar/foto di bagian publik (frontend), login ke panel admin (`/login`), buka menu **Pengaturan Website** (`/admin/pengaturan`), dan ikuti petunjuk berikut:
+
+### 1. Mengubah Foto Hero
+* **Hero Slider Utama (Beranda / Homepage)**:
+  * Temukan **Segmen 4: Image Slider Hero (Maks. 5 Foto)**.
+  * Pilih/upload file pada slot *Foto Slider 1* s.d *Foto Slider 5*.
+  * Rekomendasi ukuran ideal: **1920×700 piksel** (maks. 2MB, format JPG/PNG).
+* **Hero Banner Halaman Lain (Sub-Page Header)**:
+  * Temukan **Segmen 7: Gambar Halaman Sub-Page & Identitas Sekolah**.
+  * Unggah foto baru pada kolom **Gambar Header Sub-Page**.
+
+### 2. Mengubah Foto Profil/Identitas Sekolah
+* Temukan **Segmen 7: Gambar Halaman Sub-Page & Identitas Sekolah**.
+* Unggah foto baru pada kolom **Foto Halaman Identitas Sekolah** (foto yang tampil di sebelah kanan tabel informasi Visi & Misi).
+
+*Catatan Teknis:*
+* Form Pengaturan Admin: [index.blade.php](file:///c:/Users/SPV%20IT/Documents/deploy/demakijo1_deploy/app/Views/backend/pengaturan/index.blade.php)
+* Controller Backend: [PengaturanController.php](file:///c:/Users/SPV%20IT/Documents/deploy/demakijo1_deploy/app/Controllers/Backend/PengaturanController.php)
 
 ---
 
