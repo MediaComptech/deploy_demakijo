@@ -95,7 +95,7 @@ function guruCardIcon($idx) {
             </div>
 
             @if($item->foto)
-                <img src="{{ asset('storage/'.$item->foto) }}" alt="{{ $item->nama }}" class="guru-avatar mx-auto d-block">
+                <img src="{{ asset('storage/'.$item->foto) }}" alt="{{ $item->nama }}" class="guru-avatar mx-auto d-block" loading="lazy">
             @else
                 <div class="guru-avatar mx-auto d-flex align-items-center justify-content-center"
                      style="background:#003d8a; color:#fff; font-size:1.3rem; font-weight:800;">{{ $initials }}</div>
@@ -128,7 +128,7 @@ function guruCardIcon($idx) {
                         <div class="col-md-7 mb-4 mb-md-0">
                             <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
                                 @if($item->foto)
-                                    <img src="{{ asset('storage/'.$item->foto) }}" alt="Avatar" class="rounded-circle me-3" style="width:70px;height:70px;object-fit:cover;">
+                                    <img src="{{ asset('storage/'.$item->foto) }}" alt="Avatar" class="rounded-circle me-3" style="width:70px;height:70px;object-fit:cover;" loading="lazy">
                                 @else
                                     <div class="rounded-circle me-3 d-flex align-items-center justify-content-center"
                                          style="width:70px;height:70px;background:#003d8a;color:#fff;font-size:1.2rem;font-weight:800;">{{ $initials }}</div>

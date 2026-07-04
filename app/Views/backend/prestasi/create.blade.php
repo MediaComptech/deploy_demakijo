@@ -17,6 +17,16 @@
             <input type="text" name="judul" class="form-control" value="{{ old('judul') }}" required>
         </div>
         <div class="mb-3">
+            <label class="form-label fw-semibold">Kategori</label>
+            <select name="kategori" class="form-select" required>
+                <option value="Lainnya">-- Pilih Kategori --</option>
+                <option value="Akademik">Akademik</option>
+                <option value="Olahraga">Olahraga</option>
+                <option value="Seni & Budaya">Seni & Budaya</option>
+                <option value="Lainnya">Lainnya</option>
+            </select>
+        </div>
+        <div class="mb-3">
             <label class="form-label fw-semibold">Tingkat</label>
             <select name="tingkat" class="form-select" required>
                 <option value="">-- Pilih Tingkat --</option>

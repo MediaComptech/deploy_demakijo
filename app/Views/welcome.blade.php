@@ -186,7 +186,7 @@
                 <div class="carousel-item {{ $idx == 0 ? 'active' : '' }}">
                     <div class="position-relative">
                         {{-- Gambar: proporsional, tidak dipotong --}}
-                        <img src="{{ $slide }}" alt="Slide {{ $idx+1 }}" class="hero-slide-img">
+                        <img src="{{ $slide }}" alt="Slide {{ $idx+1 }}" class="hero-slide-img" {!! $idx == 0 ? 'fetchpriority="high"' : 'loading="lazy"' !!}>
 
                         {{-- Overlay layer --}}
                         <div class="hero-slide-overlay {{ $isCustomSlider ? 'hero-slide-custom' : '' }}">
@@ -279,10 +279,10 @@
                                 <img src="{{ asset('storage/'.$setting->foto_kepsek) }}"
                                      alt="{{ $setting->nama_kepsek ?? 'Kepala Sekolah' }}"
                                      class="img-fluid rounded-circle border border-4 border-warning shadow mb-3"
-                                     style="width:150px; height:150px; object-fit:cover;">
+                                     style="width:150px; height:150px; object-fit:cover;" loading="lazy">
                             @else
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($setting->nama_kepsek ?? 'Kepala Sekolah') }}&background=ffde59&color=004aad&size=200"
-                                     alt="Kepala Sekolah" class="img-fluid rounded-circle border border-4 border-warning shadow mb-3" style="width:150px;">
+                                     alt="Kepala Sekolah" class="img-fluid rounded-circle border border-4 border-warning shadow mb-3" style="width:150px;" loading="lazy">
                             @endif
                             <h5 class="text-white fw-bold mb-0">{{ $setting->nama_kepsek ?? 'Kepala Sekolah' }}</h5>
                             <small class="text-warning">Kepala Sekolah</small>
@@ -363,9 +363,9 @@
             <div class="col-md-4" data-aos="fade-up">
                 <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
                     @if($item->gambar)
-                        <img src="{{ asset('storage/'.$item->gambar) }}" class="card-img-top" alt="{{ $item->judul }}" style="height:200px; object-fit:cover;">
+                        <img src="{{ asset('storage/'.$item->gambar) }}" class="card-img-top" alt="{{ $item->judul }}" style="height:200px; object-fit:cover;" loading="lazy">
                     @else
-                        <img src="https://images.unsplash.com/photo-1546410531-bea5aad1028f?auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="News" style="height:200px; object-fit:cover;">
+                        <img src="https://images.unsplash.com/photo-1546410531-bea5aad1028f?auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="News" style="height:200px; object-fit:cover;" loading="lazy">
                     @endif
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">

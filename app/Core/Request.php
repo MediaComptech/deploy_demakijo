@@ -158,12 +158,20 @@ class NativeUploadedFile
      */
     public function store(string $path, string $disk = 'public'): string
     {
-        $ext       = $this->getClientOriginalExtension();
+        $ext       = strtolower($this->getClientOriginalExtension());
+        
+        // Whitelist ekstensi aman untuk mencegah eksekusi file berbahaya (RCE)
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'zip', 'rar', 'mp4', 'txt'];
+        if (!in_array($ext, $allowedExtensions)) {
+            http_response_code(400);
+            die("Error: Tipe file ." . htmlspecialchars($ext) . " tidak diizinkan untuk alasan keamanan.");
+        }
+
         $filename  = uniqid('', true) . '.' . $ext;
         $storageDir = __DIR__ . '/../../public/storage/' . trim($path, '/');
 
         if (!is_dir($storageDir)) {
-            mkdir($storageDir, 0777, true);
+            mkdir($storageDir, 0755, true);
         }
 
         $destination = $storageDir . '/' . $filename;

@@ -17,6 +17,7 @@
                         <th width="5%">No</th>
                         <th width="60">Foto</th>
                         <th>Judul</th>
+                        <th>Kategori</th>
                         <th>Tingkat</th>
                         <th>Tanggal</th>
                         <th width="110" class="text-center">Aksi</th>
@@ -38,6 +39,9 @@
                             @endif
                         </td>
                         <td class="fw-semibold">{{ $item->judul ?? '-' }}</td>
+                        <td>
+                            <span class="badge bg-secondary">{{ $item->kategori ?? 'Lainnya' }}</span>
+                        </td>
                         <td>
                             @php
                                 $tingkat = strtolower($item->tingkat ?? '');

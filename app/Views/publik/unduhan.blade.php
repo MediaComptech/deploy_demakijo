@@ -89,16 +89,16 @@ function docKategori($judul) {
                 <i class="fas fa-search"></i>
                 <input type="text" class="search-input" placeholder="Cari dokumen..." id="docSearch">
             </div>
-            <select class="filter-select">
-                <option>Semua Kategori</option>
-                <option>Pengumuman</option>
-                <option>Akademik</option>
-                <option>Formulir</option>
-                <option>Lainnya</option>
+            <select class="filter-select" id="catSelect">
+                <option value="all">Semua Kategori</option>
+                <option value="pengumuman">Pengumuman</option>
+                <option value="akademik">Akademik</option>
+                <option value="formulir">Formulir</option>
+                <option value="lainnya">Lainnya</option>
             </select>
-            <select class="filter-select">
-                <option>Terbaru</option>
-                <option>Terlama</option>
+            <select class="filter-select" id="sortSelect">
+                <option value="newest">Terbaru</option>
+                <option value="oldest">Terlama</option>
             </select>
             <button class="view-toggle active" title="List"><i class="fas fa-list"></i></button>
             <button class="view-toggle" title="Grid"><i class="fas fa-th-large"></i></button>
@@ -113,11 +113,11 @@ function docKategori($judul) {
             $countLainnya    = $unduhan->filter(fn($u) => !in_array(docKategori($u->judul)['class'], ['pengumuman','akademik','formulir']))->count();
         @endphp
         <div class="tab-cats">
-            <a href="#" class="tab-cat active"><i class="fas fa-th-large"></i> Semua <span class="cnt">{{ $total }}</span></a>
-            <a href="#" class="tab-cat"><i class="fas fa-bullhorn"></i> Pengumuman <span class="cnt">{{ $countPengumuman }}</span></a>
-            <a href="#" class="tab-cat"><i class="fas fa-graduation-cap"></i> Akademik <span class="cnt">{{ $countAkademik }}</span></a>
-            <a href="#" class="tab-cat"><i class="fas fa-file-alt"></i> Formulir <span class="cnt">{{ $countFormulir }}</span></a>
-            <a href="#" class="tab-cat"><i class="fas fa-ellipsis-h"></i> Lainnya <span class="cnt">{{ $countLainnya }}</span></a>
+            <a href="javascript:void(0)" class="tab-cat active" data-filter="all"><i class="fas fa-th-large"></i> Semua <span class="cnt">{{ $total }}</span></a>
+            <a href="javascript:void(0)" class="tab-cat" data-filter="pengumuman"><i class="fas fa-bullhorn"></i> Pengumuman <span class="cnt">{{ $countPengumuman }}</span></a>
+            <a href="javascript:void(0)" class="tab-cat" data-filter="akademik"><i class="fas fa-graduation-cap"></i> Akademik <span class="cnt">{{ $countAkademik }}</span></a>
+            <a href="javascript:void(0)" class="tab-cat" data-filter="formulir"><i class="fas fa-file-alt"></i> Formulir <span class="cnt">{{ $countFormulir }}</span></a>
+            <a href="javascript:void(0)" class="tab-cat" data-filter="lainnya"><i class="fas fa-ellipsis-h"></i> Lainnya <span class="cnt">{{ $countLainnya }}</span></a>
         </div>
 
         <!-- Tabel Dokumen -->
@@ -141,7 +141,7 @@ function docKategori($judul) {
                         $tgl   = $item->created_at ? $item->created_at->format('d M Y') : '-';
                         $fileUrl = $item->file_lampiran ? asset('storage/'.$item->file_lampiran) : '#';
                     @endphp
-                    <tr>
+                    <tr class="doc-row" data-category="{{ $kat['class'] }}" data-timestamp="{{ $item->created_at ? $item->created_at->timestamp : 0 }}">
                         <td class="doc-no">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
@@ -207,22 +207,116 @@ function docKategori($judul) {
 </a>
 
 <script>
-// Search filter
-document.getElementById('docSearch').addEventListener('input', function() {
-    const val = this.value.toLowerCase();
-    document.querySelectorAll('#docTable tbody tr').forEach(function(row) {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(val) ? '' : 'none';
+document.addEventListener('DOMContentLoaded', function() {
+    const docSearch = document.getElementById('docSearch');
+    const catSelect = document.getElementById('catSelect');
+    const sortSelect = document.getElementById('sortSelect');
+    const tabCats = document.querySelectorAll('.tab-cat');
+    const tableBody = document.querySelector('#docTable tbody');
+    const originalRows = Array.from(tableBody.querySelectorAll('.doc-row'));
+    const emptyRow = tableBody.querySelector('tr:not(.doc-row)');
+
+    let currentCategory = 'all';
+
+    function filterAndSortDocs() {
+        const searchQuery = docSearch.value.toLowerCase();
+        
+        // Filter rows
+        let visibleCount = 0;
+        originalRows.forEach(row => {
+            const cat = row.getAttribute('data-category');
+            const matchesCategory = (currentCategory === 'all' || cat === currentCategory || 
+                                     (currentCategory === 'lainnya' && !['pengumuman', 'akademik', 'formulir'].includes(cat)));
+            
+            const text = row.textContent.toLowerCase();
+            const matchesSearch = text.includes(searchQuery);
+
+            if (matchesCategory && matchesSearch) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Toggle empty message row
+        if (emptyRow) {
+            if (visibleCount === 0) {
+                emptyRow.style.display = '';
+            } else {
+                emptyRow.style.display = 'none';
+            }
+        }
+
+        // Sort rows
+        const sortedRows = originalRows.filter(row => row.style.display !== 'none');
+        const isNewest = sortSelect.value === 'newest';
+        sortedRows.sort((a, b) => {
+            const timeA = parseInt(a.getAttribute('data-timestamp') || 0);
+            const timeB = parseInt(b.getAttribute('data-timestamp') || 0);
+            return isNewest ? (timeB - timeA) : (timeA - timeB);
+        });
+
+        // Re-append sorted rows in correct order and update visible indexes
+        let visibleIdx = 1;
+        sortedRows.forEach(row => {
+            tableBody.appendChild(row);
+            const noCell = row.querySelector('.doc-no');
+            if (noCell) {
+                noCell.textContent = String(visibleIdx++).padStart(2, '0');
+            }
+        });
+
+        // Append hidden rows back to the end of the tbody
+        originalRows.forEach(row => {
+            if (row.style.display === 'none') {
+                tableBody.appendChild(row);
+            }
+        });
+    }
+
+    // Tab-cats click events
+    tabCats.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            tabCats.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            currentCategory = this.getAttribute('data-filter') || 'all';
+            catSelect.value = currentCategory;
+            
+            filterAndSortDocs();
+        });
     });
-});
-// Scroll to top
-window.addEventListener('scroll', function() {
-    const btn = document.getElementById('scrollTopBtn');
-    if (btn) btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
-});
-document.getElementById('scrollTopBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Category select event
+    catSelect.addEventListener('change', function() {
+        currentCategory = this.value;
+        
+        tabCats.forEach(tab => {
+            if ((tab.getAttribute('data-filter') || 'all') === currentCategory) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+
+        filterAndSortDocs();
+    });
+
+    // Search and Sort events
+    docSearch.addEventListener('input', filterAndSortDocs);
+    sortSelect.addEventListener('change', filterAndSortDocs);
+
+    // Scroll to top
+    window.addEventListener('scroll', function() {
+        const btn = document.getElementById('scrollTopBtn');
+        if (btn) btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+    });
+    document.getElementById('scrollTopBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 });
 </script>
 @endsection

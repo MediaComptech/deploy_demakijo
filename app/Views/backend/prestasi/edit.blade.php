@@ -18,6 +18,16 @@
             <input type="text" name="judul" class="form-control" value="{{ old('judul', $data->judul) }}" required>
         </div>
         <div class="mb-3">
+            <label class="form-label fw-semibold">Kategori</label>
+            <select name="kategori" class="form-select" required>
+                <option value="Lainnya" {{ old('kategori', $data->kategori) == 'Lainnya' ? 'selected' : '' }}>-- Pilih Kategori --</option>
+                <option value="Akademik" {{ old('kategori', $data->kategori) == 'Akademik' ? 'selected' : '' }}>Akademik</option>
+                <option value="Olahraga" {{ old('kategori', $data->kategori) == 'Olahraga' ? 'selected' : '' }}>Olahraga</option>
+                <option value="Seni & Budaya" {{ old('kategori', $data->kategori) == 'Seni & Budaya' ? 'selected' : '' }}>Seni & Budaya</option>
+                <option value="Lainnya" {{ old('kategori', $data->kategori) == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+            </select>
+        </div>
+        <div class="mb-3">
             <label class="form-label fw-semibold">Tingkat</label>
             <select name="tingkat" class="form-select" required>
                 <option value="">-- Pilih Tingkat --</option>

@@ -38,15 +38,15 @@
 
 <!-- Filter Chips + Sort -->
 <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
-    <a href="#" class="filter-chip active"><i class="fas fa-th-large"></i> Semua Prestasi</a>
-    <a href="#" class="filter-chip"><i class="fas fa-graduation-cap"></i> Akademik</a>
-    <a href="#" class="filter-chip"><i class="fas fa-running"></i> Olahraga</a>
-    <a href="#" class="filter-chip"><i class="fas fa-music"></i> Seni & Budaya</a>
-    <a href="#" class="filter-chip"><i class="fas fa-ellipsis-h"></i> Lainnya</a>
+    <a href="?" class="filter-chip {{ empty($kategori) ? 'active' : '' }}"><i class="fas fa-th-large"></i> Semua Prestasi</a>
+    <a href="?kategori=Akademik&sort={{ $sort }}" class="filter-chip {{ $kategori === 'Akademik' ? 'active' : '' }}"><i class="fas fa-graduation-cap"></i> Akademik</a>
+    <a href="?kategori=Olahraga&sort={{ $sort }}" class="filter-chip {{ $kategori === 'Olahraga' ? 'active' : '' }}"><i class="fas fa-running"></i> Olahraga</a>
+    <a href="?kategori=Seni%20%26%20Budaya&sort={{ $sort }}" class="filter-chip {{ $kategori === 'Seni & Budaya' ? 'active' : '' }}"><i class="fas fa-music"></i> Seni & Budaya</a>
+    <a href="?kategori=Lainnya&sort={{ $sort }}" class="filter-chip {{ $kategori === 'Lainnya' ? 'active' : '' }}"><i class="fas fa-ellipsis-h"></i> Lainnya</a>
     <div class="ms-auto">
-        <select style="border:1.5px solid #dee2e6;border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:600;color:#444;background:#fff;">
-            <option>Terbaru</option>
-            <option>Terlama</option>
+        <select onchange="location.href = '?kategori={{ urlencode($kategori ?? '') }}&sort=' + this.value" style="border:1.5px solid #dee2e6;border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:600;color:#444;background:#fff;outline:none;">
+            <option value="Terbaru" {{ $sort === 'Terbaru' ? 'selected' : '' }}>Terbaru</option>
+            <option value="Terlama" {{ $sort === 'Terlama' ? 'selected' : '' }}>Terlama</option>
         </select>
     </div>
 </div>
@@ -60,27 +60,40 @@
     <div class="col-md-6" data-aos="fade-up">
         <div class="prestasi-card">
             <!-- Badge medali -->
-            <div class="medal-badge" title="Juara 1"></div>
+            <div class="medal-badge" title="Juara"></div>
 
             <div class="d-flex gap-3 align-items-start h-100">
-                <!-- Ikon piala -->
-                <div class="prestasi-icon-wrap theme-{{ $theme }}">
-                    <i class="fas fa-trophy"></i>
-                </div>
+                <!-- Ikon piala / Foto kecil -->
+                @if($item->foto)
+                    <div class="position-relative flex-shrink-0" style="width:68px; height:68px;">
+                        <img src="{{ asset('storage/'.$item->foto) }}" alt="{{ $item->judul }}" class="rounded-circle border border-2 border-primary" style="width:68px; height:68px; object-fit:cover;" loading="lazy">
+                    </div>
+                @else
+                    <div class="prestasi-icon-wrap theme-{{ $theme }}">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                @endif
 
                 <!-- Konten -->
                 <div class="prestasi-content">
                     <h5 class="prestasi-title">{{ $item->judul }}</h5>
-                    <div class="tingkat-badge theme-{{ $theme }}">Tingkat: {{ $item->tingkat }}</div>
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        <span class="tingkat-badge theme-{{ $theme }} mb-0">Tingkat: {{ $item->tingkat }}</span>
+                        <span class="badge bg-secondary-subtle text-secondary px-2 py-1 rounded-pill" style="font-size: 0.72rem; font-weight: 600;">{{ $item->kategori ?? 'Lainnya' }}</span>
+                    </div>
                     @if(!empty($item->deskripsi))
-                    <p class="prestasi-desc">{{ Str::limit($item->deskripsi, 120) }}</p>
+                    <p class="prestasi-desc mb-3">{{ Str::limit($item->deskripsi, 120) }}</p>
                     @endif
                     <div class="prestasi-footer mt-auto">
                         <div class="prestasi-date">
                             <i class="far fa-calendar-alt text-warning fs-6"></i>
                             {{ date('d M Y', strtotime($item->tanggal)) }}
                         </div>
-                        <a href="#" class="btn-detail-link ms-auto">Lihat Detail <i class="fas fa-chevron-right"></i></a>
+                        <a href="javascript:void(0)" 
+                           class="btn-detail-link ms-auto"
+                           onclick="showPrestasiDetail('{{ addslashes($item->judul) }}', '{{ $item->kategori ?? 'Lainnya' }}', '{{ $item->tingkat }}', '{{ date('d M Y', strtotime($item->tanggal)) }}', '{{ addslashes($item->deskripsi ?? '') }}', '{{ $item->foto ? asset('storage/'.$item->foto) : '' }}')">
+                           Lihat Detail <i class="fas fa-chevron-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -88,19 +101,77 @@
     </div>
     @empty
     <div class="col-12 text-center py-5">
-        <i class="fas fa-trophy fa-3x mb-3 d-block" style="color:#dee2e6;"></i>
-        <p class="text-muted fs-5">Belum ada data prestasi.</p>
+        <i class="fas fa-trophy fa-3x mb-3 d-block text-muted opacity-50"></i>
+        <p class="text-muted fs-5">Belum ada data prestasi untuk kategori ini.</p>
     </div>
     @endforelse
 </div>
 
-<!-- Pagination -->
-@if($prestasi->count() > 0)
-<div class="custom-pagination">
-    <a href="#" class="page-btn arrow"><i class="fas fa-chevron-left"></i></a>
-    <a href="#" class="page-btn active">1</a>
-    <a href="#" class="page-btn arrow"><i class="fas fa-chevron-right"></i></a>
+<!-- Modal Detail Prestasi -->
+<div class="modal fade" id="prestasiDetailModal" tabindex="-1" aria-labelledby="prestasiDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0 justify-content-end">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-0 px-4 pb-4">
+                <div class="text-center mb-3">
+                    <div class="d-inline-flex p-3 bg-warning-subtle text-warning rounded-circle mb-3">
+                        <i class="fas fa-award fa-2x"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-1" id="m-judul">Detail Prestasi</h4>
+                    <span class="badge bg-primary px-3 py-2 rounded-pill fw-bold" id="m-kategori">Kategori</span>
+                </div>
+                
+                <div class="mb-4 text-center d-none" id="m-img-container">
+                    <img src="" id="m-foto" class="img-fluid rounded-3 shadow-sm border" style="max-height: 250px; object-fit: cover;" loading="lazy">
+                </div>
+
+                <div class="card bg-light border-0 rounded-3 p-3 mb-3">
+                    <div class="row g-2 text-start">
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Tingkat Prestasi</span>
+                            <strong class="text-dark" id="m-tingkat">-</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Tanggal Diperoleh</span>
+                            <strong class="text-dark" id="m-tanggal">-</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-start">
+                    <h6 class="fw-bold text-dark mb-2">Deskripsi Prestasi</h6>
+                    <p class="text-muted mb-0" style="font-size:0.9rem; line-height:1.6;" id="m-deskripsi">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-@endif
+
+@push('scripts')
+<script>
+function showPrestasiDetail(judul, kategori, tingkat, tanggal, deskripsi, fotoUrl) {
+    document.getElementById('m-judul').innerText = judul;
+    document.getElementById('m-kategori').innerText = kategori;
+    document.getElementById('m-tingkat').innerText = tingkat;
+    document.getElementById('m-tanggal').innerText = tanggal;
+    document.getElementById('m-deskripsi').innerText = deskripsi || 'Tidak ada deskripsi tambahan.';
+    
+    const imgContainer = document.getElementById('m-img-container');
+    const foto = document.getElementById('m-foto');
+    if (fotoUrl) {
+        foto.src = fotoUrl;
+        imgContainer.classList.remove('d-none');
+    } else {
+        foto.src = '';
+        imgContainer.classList.add('d-none');
+    }
+    
+    const modal = new bootstrap.Modal(document.getElementById('prestasiDetailModal'));
+    modal.show();
+}
+</script>
+@endpush
 
 @endsection

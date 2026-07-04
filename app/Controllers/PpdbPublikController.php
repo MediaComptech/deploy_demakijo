@@ -32,6 +32,11 @@ class PpdbPublikController extends Controller
         $noPendaftaran = 'PPDB-' . date('Y') . '-' . str_pad($lastId + 1, 5, '0', STR_PAD_LEFT);
 
         $input = $request->except('_token');
+        foreach ($input as $key => $val) {
+            if (is_string($val)) {
+                $input[$key] = htmlspecialchars(strip_tags(trim($val)), ENT_QUOTES, 'UTF-8');
+            }
+        }
         $input['no_pendaftaran'] = $noPendaftaran;
         $input['status']         = 'pending';
 

@@ -69,8 +69,23 @@ Router::get('/berita/{slug}', function ($slug) {
 });
 
 Router::get('/prestasi', function () {
-    $prestasi = \App\Models\Prestasi::latest()->get();
-    return \App\Core\View::render('publik.prestasi', compact('prestasi'));
+    $kategori = $_GET['kategori'] ?? null;
+    $sort = $_GET['sort'] ?? 'Terbaru';
+
+    $query = \App\Models\Prestasi::query();
+    
+    if ($kategori && in_array($kategori, ['Akademik', 'Olahraga', 'Seni & Budaya', 'Lainnya'])) {
+        $query->where('kategori', $kategori);
+    }
+
+    if ($sort === 'Terlama') {
+        $query->orderBy('tanggal', 'asc');
+    } else {
+        $query->orderBy('tanggal', 'desc');
+    }
+
+    $prestasi = $query->get();
+    return \App\Core\View::render('publik.prestasi', compact('prestasi', 'kategori', 'sort'));
 });
 
 Router::get('/struktur-organisasi', function () {
@@ -93,8 +108,12 @@ Router::get('/alumni', function () {
 });
 
 Router::post('/alumni/daftar', function () {
-    $data = $_POST;
-    unset($data['_token']);
+    $data = [];
+    foreach ($_POST as $key => $val) {
+        if ($key === '_token') continue;
+        $data[$key] = is_string($val) ? htmlspecialchars(strip_tags(trim($val)), ENT_QUOTES, 'UTF-8') : $val;
+    }
+    $data['is_verified'] = false;
     \App\Models\Alumni::create($data);
     \App\Core\Session::setFlash('success', 'Terima kasih, pendaftaran Anda berhasil. Data akan diverifikasi oleh Admin.');
     redirect('/alumni');

@@ -59,6 +59,9 @@ class Router
 
         // Log POST request data for tracking & auto-clear cache for instant local testing updates
         if ($method === 'POST') {
+            // Verify CSRF Token
+            \App\Core\Security::verifyCsrfToken();
+
             $postData = $_POST;
             if (isset($postData['password'])) {
                 $postData['password'] = '********';
