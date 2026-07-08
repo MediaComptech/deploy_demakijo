@@ -48,18 +48,14 @@
 @section('content')
 
 @php
-function guruJabatanClass($jabatan) {
-    $j = strtolower($jabatan ?? '');
-    if (str_contains($j,'mapel')) return 'mapel';
-    if (str_contains($j,'pendamping')) return 'pendamping';
-    if (str_contains($j,'tendik') || str_contains($j,'kependidikan') || str_contains($j,'tata usaha') || str_contains($j,'penjaga')) return 'tendik';
-    return '';
+function guruKategoriClass($kategori) {
+    if ($kategori === 'kelas') return '';
+    return $kategori ?? '';
 }
-function guruJabatanIcon($jabatan) {
-    $j = strtolower($jabatan ?? '');
-    if (str_contains($j,'mapel')) return 'fas fa-book-open';
-    if (str_contains($j,'pendamping')) return 'fas fa-hands-helping';
-    if (str_contains($j,'tendik') || str_contains($j,'tata usaha') || str_contains($j,'penjaga') || str_contains($j,'kependidikan')) return 'fas fa-id-badge';
+function guruKategoriIcon($kategori) {
+    if ($kategori === 'mapel') return 'fas fa-book-open';
+    if ($kategori === 'pendamping') return 'fas fa-hands-helping';
+    if ($kategori === 'tendik') return 'fas fa-id-badge';
     return 'fas fa-chalkboard-teacher';
 }
 function guruCardIcon($idx) {
@@ -82,12 +78,12 @@ function guruCardIcon($idx) {
 <div class="row g-3 mb-4">
     @forelse($guru as $idx => $item)
     @php
-        $jabatanClass = guruJabatanClass($item->jabatan);
-        $jabatanIcon  = guruJabatanIcon($item->jabatan);
+        $jabatanClass = guruKategoriClass($item->kategori);
+        $jabatanIcon  = guruKategoriIcon($item->kategori);
         $cardIcon     = guruCardIcon($idx);
         $initials     = collect(explode(' ', $item->nama))->take(2)->map(fn($w) => strtoupper($w[0] ?? ''))->implode('');
     @endphp
-    <div class="col-6 col-md-4 col-lg-3 guru-item-col" data-kategori="{{ $jabatanClass ?: 'kelas' }}" data-aos="fade-up" data-aos-delay="{{ $idx * 50 }}">
+    <div class="col-6 col-md-4 col-lg-3 guru-item-col" data-kategori="{{ $item->kategori ?: 'kelas' }}" data-aos="fade-up" data-aos-delay="{{ $idx * 50 }}">
         <div class="guru-card">
             <div class="guru-card-top">
                 <span class="badge-aktif">Aktif</span>
@@ -139,7 +135,6 @@ function guruCardIcon($idx) {
                                 </div>
                             </div>
                             <h6 class="fw-bold text-muted mb-3" style="font-size:.85rem;letter-spacing:1px;">INFORMASI PRIBADI</h6>
-                            <div class="row mb-2"><div class="col-5 text-muted small">NIP</div><div class="col-7 small fw-bold text-dark">{{ $item->nip ? substr($item->nip,0,4).str_repeat('*',max(0,strlen($item->nip)-4)) : '-' }}</div></div>
                             <div class="row mb-2"><div class="col-5 text-muted small">Jabatan</div><div class="col-7 small fw-bold text-dark">{{ $item->jabatan }}</div></div>
                             @if($item->pendidikan)
                             <div class="row mb-2"><div class="col-5 text-muted small">Pendidikan</div><div class="col-7 small fw-bold text-dark">{{ $item->pendidikan }}</div></div>

@@ -64,3 +64,9 @@ solving.md
 maintenance.md
 Website CRUD*.md
 implementation_plan_CRUD_Admin
+
+# Scratch and temporary local test folders
+scratch/
+*.png
+walkthrough_080726
+

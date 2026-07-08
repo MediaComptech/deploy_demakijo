@@ -83,6 +83,30 @@ Repositori ini adalah hasil konversi penuh dari **Laravel** ke arsitektur **Nati
 | Keunggulan Sekolah | `/admin/keunggulan` | Konten keunggulan di beranda |
 | Manajemen User | `/admin/user` | CRUD akun pengguna |
 | Pengaturan Website | `/admin/pengaturan` | Logo, slider, info sekolah, kontak, profil lengkap & detail akreditasi (Segmen 8) |
+| Log Aktivitas | `/admin/log` | Catatan riwayat aktivitas admin dengan filter modul, pencarian kata kunci, pengurutan, dan paginasi |
+
+---
+
+## 🌟 Fitur Tambahan & Pembaruan Terkini
+
+### 1. Privasi NIP Guru & Tendik (PLAN 1 & 2)
+- **Penyembunyian NIP**: Kolom NIP telah dihilangkan dari tabel daftar guru di panel admin, form input (tambah/edit), serta tampilan detail modal guru & tendik di halaman publik untuk menjaga privasi.
+- **Konversi Otomatis Nullable Unique**: NIP dikonversi otomatis menjadi `null` saat dikosongkan agar tidak melanggar aturan database UNIQUE constraint.
+- **Pengecekan NISN**: Telah diverifikasi tidak terdapat penayangan NISN di frontend publik (hanya no pendaftaran untuk cek status PPDB), sehingga aman dari kebocoran data.
+
+### 2. Kategori & Pendidikan Terakhir Guru/Tendik
+- **Kolom Kategori Baru**: Penambahan kolom `kategori` di tabel `gurus` dengan opsi `kelas` (Guru Kelas), `mapel` (Guru Mapel), `pendamping` (Guru Pendamping), dan `tendik` (Tenaga Kependidikan) pada form tambah/edit admin.
+- **Navigasi Publik Presisi**: Filtering kartu guru di halaman publik `/guru-tendik` kini berjalan secara presisi menyesuaikan opsi kategori yang dipilih admin di backend (bukan tebakan regex dari nama jabatan).
+- **Pilihan Pendidikan Terakhir**: Input bebas kolom pendidikan diubah menjadi dropdown pilihan terstruktur (`SD`, `SMP`, `SMA`, `S1`, `S2`, `S3`).
+
+### 3. Log Aktivitas Sistem (Activity Log)
+- **Dashboard Log**: Menu khusus `/admin/log` dengan tampilan modern untuk melihat riwayat aktivitas sistem.
+- **Fitur Pencarian & Filter**: Dilengkapi pencarian kata kunci (deskripsi log, modul, nama operator), filter dropdown modul (`auth`, `guru`, `siswa`, `system`, dll.), dan pengurutan (terbaru, terlama, deskripsi).
+- **Paginasi Offset Kustom**: Implementasi offset pagination custom 15 data/halaman yang aman tanpa membutuhkan modul eksternal `illuminate/pagination`.
+- **Trigger Pencatatan Log**: Sistem otomatis mencatat log pada aksi login berhasil, logout, serta aksi penambahan, pengubahan, dan penghapusan data guru.
+
+### 4. Deployment Helper (`setup_deploy.php`)
+- Peningkatan menu deploy cPanel untuk mempermudah eksekusi migrasi database ke-6 (`migrate_add_kategori_to_gurus.php`) dan penambahan fitur bersihkan cache Blade secara mandiri.
 
 ---
 

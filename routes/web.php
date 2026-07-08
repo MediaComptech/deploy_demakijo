@@ -296,6 +296,10 @@ Router::get('/admin/user/{id}/edit', 'Backend\UserController@edit');
 Router::post('/admin/user/{id}/update', 'Backend\UserController@update');
 Router::post('/admin/user/{id}/delete', 'Backend\UserController@destroy');
 
+// Log Aktivitas
+Router::get('/admin/log', 'Backend\LogController@index');
+
+
 // Keunggulan Sekolah
 Router::get('/admin/keunggulan', 'Backend\KeunggulanController@index');
 Router::get('/admin/keunggulan/create', 'Backend\KeunggulanController@create');

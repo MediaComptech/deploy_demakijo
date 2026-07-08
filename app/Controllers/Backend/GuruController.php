@@ -28,12 +28,13 @@ class GuruController extends Controller
     public function store(Request $request)
     {
         $input = $request->except('_token');
-        // Konversi NIP kosong ke null agar tidak melanggar UNIQUE constraint
-        if (isset($input['nip']) && $input['nip'] === '') $input['nip'] = null;
+        // Selalu set NIP ke null demi privasi
+        $input['nip'] = null;
         if ($request->hasFile('foto')) {
             $input['foto'] = $request->file('foto')->store('uploads', 'public');
         }
-        Guru::create($input);
+        $guru = Guru::create($input);
+        log_activity("Menambahkan data guru baru '{$guru->nama}' dengan jabatan '{$guru->jabatan}'", 'guru', $guru);
         redirect('/admin/guru')->with('success', 'Data Guru berhasil ditambahkan');
     }
 
@@ -47,13 +48,15 @@ class GuruController extends Controller
     {
         $model = Guru::findOrFail($id);
         $input = $request->except('_token', '_method');
-        // Konversi NIP kosong ke null agar tidak melanggar UNIQUE constraint
-        if (isset($input['nip']) && $input['nip'] === '') $input['nip'] = null;
+        // Selalu set NIP ke null demi privasi
+        $input['nip'] = null;
         if ($request->hasFile('foto')) {
             if ($model->foto) native_storage_delete($model->foto);
             $input['foto'] = $request->file('foto')->store('uploads', 'public');
         }
+        $oldName = $model->nama;
         $model->update($input);
+        log_activity("Mengubah data guru '{$oldName}' (Jabatan: {$model->jabatan})", 'guru', $model);
         redirect('/admin/guru')->with('success', 'Data Guru berhasil diubah');
     }
 
@@ -61,7 +64,9 @@ class GuruController extends Controller
     {
         $model = Guru::findOrFail($id);
         if ($model->foto) native_storage_delete($model->foto);
+        $nama = $model->nama;
         $model->delete();
+        log_activity("Menghapus data guru '{$nama}'", 'guru');
         redirect('/admin/guru')->with('success', 'Data Guru berhasil dihapus');
     }
 }

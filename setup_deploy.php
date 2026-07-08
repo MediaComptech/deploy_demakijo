@@ -113,7 +113,8 @@ if ($action === 'check') {
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=create_env" style="background:#28a745;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">⚙️ 3. Buat file .env production</a></p>';
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=fix_perms" style="background:#fd7e14;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">🔐 4. Fix Permission Folder</a></p>';
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=seed_calendar" style="background:#7c3aed;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">📅 5. Update Kalender Akademik Sleman</a></p>';
-    echo '<p><a href="?token='.$SECRET_TOKEN.'&action=run_migrations" style="background:#20c997;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">🗄️ 6. Jalankan Migrasi Database (Kategori, Profil Sekolah, dsb)</a></p>';
+    echo '<p><a href="?token='.$SECRET_TOKEN.'&action=run_migrations" style="background:#20c997;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">🗄️ 6. Jalankan Semua Migrasi Database</a></p>';
+    echo '<p><a href="?token='.$SECRET_TOKEN.'&action=clear_cache" style="background:#6c757d;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-right:10px;">🧹 7. Bersihkan Cache Blade Template</a></p>';
     echo '<p><a href="?token='.$SECRET_TOKEN.'&action=all" style="background:#003366;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">🚀 LAKUKAN SEMUA LANGKAH SEKALIGUS</a></p>';
     echo '</div>';
 }
@@ -205,6 +206,24 @@ if ($action === 'seed_calendar' || $action === 'all') {
     echo '</div>';
 }
 
+// ==== ACTION: CLEAR BLADE CACHE ====
+if ($action === 'clear_cache' || $action === 'all') {
+    echo '<div class="box"><h3>🧹 Membersihkan Cache Blade Template...</h3>';
+    $cacheDir = $PUBLIC_HTML . '/storage/cache';
+    if (is_dir($cacheDir)) {
+        $caches = glob($cacheDir . '/*.{bladec,php}', GLOB_BRACE);
+        $deleted = 0;
+        foreach ($caches ?? [] as $f) {
+            if (basename($f) !== '.gitkeep') { @unlink($f); $deleted++; }
+        }
+        log_line("Cache Blade dihapus: {$deleted} file berhasil dihapus");
+    } else {
+        log_line("Folder cache tidak ditemukan di {$cacheDir}. Dibuat baru.");
+        @mkdir($cacheDir, 0755, true);
+    }
+    echo '</div>';
+}
+
 // ==== ACTION: RUN MIGRATIONS ====
 if ($action === 'run_migrations' || $action === 'all') {
     echo '<div class="box"><h3>🗄️ Menjalankan Migrasi Database...</h3>';
@@ -269,8 +288,21 @@ if ($action === 'run_migrations' || $action === 'all') {
         log_line("Migrasi 5 tidak ditemukan di {$m5}, melewati...");
     }
 
+    // 6. Jalankan migrasi Tambah Kategori Guru & Tendik
+    $m6 = $PUBLIC_HTML . '/migrate_add_kategori_to_gurus.php';
+    if (file_exists($m6)) {
+        ob_start();
+        include $m6;
+        $output = ob_get_clean();
+        echo "<pre style='background:#f8fafc; padding:10px; border-radius:6px; border:1px solid #e2e8f0; font-family:monospace; color:#333;'>" . htmlspecialchars($output) . "</pre>";
+        log_line("Migrasi 6 (Kategori Guru & Tendik) selesai!");
+    } else {
+        log_line("Migrasi 6 tidak ditemukan di {$m6}, melewati...");
+    }
+
     echo '</div>';
 }
+
 
 // ==== FINISH ====
 if ($action === 'all') {

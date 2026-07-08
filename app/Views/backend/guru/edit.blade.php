@@ -14,10 +14,6 @@
             <input type="hidden" name="_method" value="PUT">
             
         <div class="mb-3">
-            <label class="form-label fw-semibold">NIP</label>
-            <input type="text" name="nip" class="form-control" value="{{ old('nip', $data->nip) }}" >
-        </div>
-        <div class="mb-3">
             <label class="form-label fw-semibold">Nama Lengkap</label>
             <input type="text" name="nama" class="form-control" value="{{ old('nama', $data->nama) }}" required>
         </div>
@@ -26,8 +22,25 @@
             <input type="text" name="jabatan" class="form-control" value="{{ old('jabatan', $data->jabatan) }}" required>
         </div>
         <div class="mb-3">
+            <label class="form-label fw-semibold">Kategori</label>
+            <select name="kategori" class="form-select" required>
+                <option value="kelas" {{ old('kategori', $data->kategori) == 'kelas' ? 'selected' : '' }}>Guru Kelas</option>
+                <option value="mapel" {{ old('kategori', $data->kategori) == 'mapel' ? 'selected' : '' }}>Guru Mapel</option>
+                <option value="pendamping" {{ old('kategori', $data->kategori) == 'pendamping' ? 'selected' : '' }}>Guru Pendamping</option>
+                <option value="tendik" {{ old('kategori', $data->kategori) == 'tendik' ? 'selected' : '' }}>Tenaga Kependidikan</option>
+            </select>
+        </div>
+        <div class="mb-3">
             <label class="form-label fw-semibold">Pendidikan Terakhir</label>
-            <textarea name="pendidikan" class="form-control" rows="4" >{{ old('pendidikan', $data->pendidikan) }}</textarea>
+            <select name="pendidikan" class="form-select">
+                <option value="">-- Pilih Pendidikan --</option>
+                <option value="SD" {{ old('pendidikan', $data->pendidikan) == 'SD' ? 'selected' : '' }}>SD</option>
+                <option value="SMP" {{ old('pendidikan', $data->pendidikan) == 'SMP' ? 'selected' : '' }}>SMP</option>
+                <option value="SMA" {{ old('pendidikan', $data->pendidikan) == 'SMA' ? 'selected' : '' }}>SMA</option>
+                <option value="S1" {{ old('pendidikan', $data->pendidikan) == 'S1' ? 'selected' : '' }}>S1</option>
+                <option value="S2" {{ old('pendidikan', $data->pendidikan) == 'S2' ? 'selected' : '' }}>S2</option>
+                <option value="S3" {{ old('pendidikan', $data->pendidikan) == 'S3' ? 'selected' : '' }}>S3</option>
+            </select>
         </div>
         <div class="mb-3">
             <label class="form-label fw-semibold">Biodata / Tentang</label>

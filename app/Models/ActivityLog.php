@@ -8,5 +8,8 @@ class ActivityLog extends Model
 {
     protected $guarded = [];
 
-    //
+    public function causer()
+    {
+        return $this->belongsTo(User::class, 'causer_id');
+    }
 }

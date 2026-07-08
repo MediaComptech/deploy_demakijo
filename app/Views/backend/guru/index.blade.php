@@ -18,7 +18,7 @@
                         <th width="60">Foto</th>
                         <th>Nama</th>
                         <th>Jabatan</th>
-                        <th>NIP</th>
+                        <th>Kategori</th>
                         <th width="110" class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -39,7 +39,19 @@
                         </td>
                         <td class="fw-semibold">{{ $item->nama ?? '-' }}</td>
                         <td>{{ $item->jabatan ?? '-' }}</td>
-                        <td><span class="text-muted small">{{ $item->nip ?? '-' }}</span></td>
+                        <td>
+                             @if(($item->kategori ?? null) === 'kelas')
+                                 <span class="badge bg-primary">Guru Kelas</span>
+                             @elseif(($item->kategori ?? null) === 'mapel')
+                                 <span class="badge bg-success">Guru Mapel</span>
+                             @elseif(($item->kategori ?? null) === 'pendamping')
+                                 <span class="badge bg-warning text-dark">Guru Pendamping</span>
+                             @elseif(($item->kategori ?? null) === 'tendik')
+                                 <span class="badge bg-info text-dark">Tenaga Kependidikan</span>
+                             @else
+                                 <span class="badge bg-secondary">-</span>
+                             @endif
+                         </td>
                         <td class="text-center">
                             <a href="{{ route('admin.guru.edit', $item->id) }}"
                                class="btn btn-warning btn-sm" title="Edit">

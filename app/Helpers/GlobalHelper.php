@@ -312,3 +312,31 @@ if (!function_exists('unique_slug')) {
     }
 }
 
+if (!function_exists('log_activity')) {
+    function log_activity(string $description, string $logName = 'default', $subject = null, array $properties = null)
+    {
+        $userId = \App\Core\Session::get('user_id');
+        $data = [
+            'log_name' => $logName,
+            'description' => $description,
+            'causer_type' => $userId ? \App\Models\User::class : null,
+            'causer_id' => $userId,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        if ($subject) {
+            $data['subject_type'] = is_object($subject) ? get_class($subject) : $subject;
+            $data['subject_id'] = is_object($subject) ? ($subject->id ?? $subject->getKey() ?? null) : null;
+        }
+        if ($properties) {
+            $data['properties'] = json_encode($properties);
+        }
+        
+        try {
+            \App\Models\ActivityLog::create($data);
+        } catch (\Exception $e) {
+            // Silently ignore log creation errors to prevent blocking main flow
+        }
+    }
+}
+

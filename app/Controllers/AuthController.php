@@ -44,6 +44,7 @@ class AuthController extends Controller
         // Coba login
         if (Auth::attempt($email, $password)) {
             $user = Auth::user();
+            log_activity("Pengguna '{$user->name}' berhasil masuk ke sistem", "auth");
             Session::setFlash('success', 'Selamat datang, ' . $user->name . '!');
             redirect('/dashboard');
         }
@@ -56,6 +57,10 @@ class AuthController extends Controller
 
     public function logoutAction()
     {
+        $user = Auth::user();
+        if ($user) {
+            log_activity("Pengguna '{$user->name}' keluar dari sistem", "auth");
+        }
         Auth::logout();
         redirect('/login');
     }

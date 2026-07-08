@@ -288,6 +288,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ url('/admin/log') }}" class="nav-link {{ request()->is('admin/log*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-history"></i>
+                            <p>Log Aktivitas</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ url('/admin/pengaturan') }}" class="nav-link {{ request()->is('admin/pengaturan*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-cogs"></i>
                             <p>Pengaturan Website</p>
